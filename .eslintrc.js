@@ -6,6 +6,12 @@ module.exports = {
     'import/no-unresolved': 'error',
     // Since React 17 and typescript 4.1 you can safely disable the rule
     'react/react-in-jsx-scope': 'off',
+    '@typescript-eslint/no-use-before-define': 'off',
+    'react/no-array-index-key': 'off',
+    'react/no-unescaped-entities': 'off',
+    'import/no-cycle': 'off',
+    'promise/catch-or-return': 'off',
+    'promise/always-return': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,
