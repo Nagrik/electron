@@ -3,7 +3,12 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import HeaderArrowIcon from './icons/HeaderArrowIcon';
+import { setQuery } from '../store/actions/login';
+import { selectQuery } from '../store/selectors/auth';
+import { PaginationRow } from './OrdersPage';
+import Pagination from './Pagination';
 
 type Product = {
   CategoryID: number;
@@ -21,6 +26,11 @@ type Product = {
 const ProductsPage = () => {
   const [products, setProducts] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const dispatch = useDispatch();
+  const obj = {
+    query: products?.queries,
+    time: new Date().toISOString(),
+  };
   useEffect(() => {
     axios
       .get(
@@ -32,6 +42,14 @@ const ProductsPage = () => {
         return res.data;
       });
   }, [currentPage]);
+
+  useEffect(() => {
+    if (products?.queries?.length > 0) {
+      dispatch(setQuery(obj));
+    }
+  }, [products]);
+  const query = useSelector(selectQuery);
+
   return (
     <Wrapper>
       {products ? (
@@ -63,23 +81,15 @@ const ProductsPage = () => {
                 </TableRow>
               ))}
               <PaginationWrapper>
-                <PaginationNumberWrapper>
-                  {Array.from(
-                    { length: Math.ceil(products?.count / 20) },
-                    (_, i) => i + 1
-                  ).map((number) => {
-                    return (
-                      <PaginationNumber
-                        active={number === currentPage}
-                        onClick={() => {
-                          setCurrentPage(number);
-                        }}
-                      >
-                        {number}
-                      </PaginationNumber>
-                    );
-                  })}
-                </PaginationNumberWrapper>
+                <PaginationRow>
+                  <Pagination
+                    className="pagination-bar"
+                    currentPage={currentPage}
+                    totalCount={products.count}
+                    pageSize={20}
+                    onPageChange={(page: any) => setCurrentPage(page)}
+                  />
+                </PaginationRow>
                 <PageCount>
                   Page: {currentPage} of {Math.ceil(products?.count / 20)}
                 </PageCount>

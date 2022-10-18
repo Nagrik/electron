@@ -3,7 +3,11 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
+import { useDispatch, useSelector } from 'react-redux';
 import HeaderArrowIcon from './icons/HeaderArrowIcon';
+import { setQuery } from '../store/actions/login';
+import { selectQuery } from '../store/selectors/auth';
+import Pagination from './Pagination';
 
 type Order = {
   CustomerID: string;
@@ -25,6 +29,11 @@ type Order = {
 const OrdersPage = () => {
   const [orders, setOrders] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const obj = {
+    query: orders?.queries,
+    time: new Date().toISOString(),
+  };
+  const dispatch = useDispatch();
   useEffect(() => {
     axios
       .get(
@@ -36,6 +45,17 @@ const OrdersPage = () => {
         return res.data;
       });
   }, [currentPage]);
+  useEffect(() => {
+    if (orders?.queries?.length > 0) {
+      dispatch(setQuery(obj));
+    }
+  }, [orders]);
+  const query = useSelector(selectQuery);
+  const arr = Array.from(
+    { length: Math.ceil(orders?.count / 20) },
+    (_, i) => i + 1
+  );
+
   return (
     <Wrapper>
       {orders ? (
@@ -65,7 +85,9 @@ const OrdersPage = () => {
                   <BodyTitle>{order.totalproducts}</BodyTitle>
                   <BodyCity>{order.totalquantity}</BodyCity>
                   <BodyCountry>
-                    {format(new Date(order.ShippedDate), 'yyyy-LL-dd')}
+                    {order.ShippedDate
+                      ? format(new Date(order.ShippedDate), 'yyyy-LL-dd')
+                      : ''}
                   </BodyCountry>
                   <BodyCountry>{order.ShipName}</BodyCountry>
                   <BodyCountry>{order.ShipCity}</BodyCountry>
@@ -73,23 +95,15 @@ const OrdersPage = () => {
                 </TableRow>
               ))}
               <PaginationWrapper>
-                <PaginationNumberWrapper>
-                  {Array.from(
-                    { length: Math.ceil(orders?.count / 20) },
-                    (_, i) => i + 1
-                  ).map((number) => {
-                    return (
-                      <PaginationNumber
-                        active={number === currentPage}
-                        onClick={() => {
-                          setCurrentPage(number);
-                        }}
-                      >
-                        {number}
-                      </PaginationNumber>
-                    );
-                  })}
-                </PaginationNumberWrapper>
+                <PaginationRow>
+                  <Pagination
+                    className="pagination-bar"
+                    currentPage={currentPage}
+                    totalCount={orders.count}
+                    pageSize={20}
+                    onPageChange={(page: any) => setCurrentPage(page)}
+                  />
+                </PaginationRow>
                 <PageCount>
                   Page: {currentPage} of {Math.ceil(orders?.count / 20)}
                 </PageCount>
@@ -106,30 +120,44 @@ const OrdersPage = () => {
 
 export default OrdersPage;
 
+export const PaginationRow = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const PageCount = styled.div`
   font-size: 12.8px;
 `;
 
-const PaginationNumberWrapper = styled.div`
+export const PaginationNumberWrapper = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
   border: 1px solid rgba(243, 244, 246, 1);
 `;
 
-const PaginationNumber = styled.div<{ active: boolean }>`
-  width: 7px;
+export const PaginationNumber = styled.div<{ active: boolean }>`
+  //width: 7px;
   padding: 10px 16px;
+  border-radius: 0.25rem;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  cursor: pointer;
   border: ${({ active }) =>
-    active ? '1px solid rgba(209, 213, 219, 1)' : 'none'};
-  margin-right: 8px;
+    active ? '1px solid rgba(209, 213, 219, 1)' : '1px solid #fff'};
+  //margin-right: 8px;
+  :hover {
+    border: 1px solid black;
+    border-radius: 0.25rem;
+  }
 `;
 
-const PaginationWrapper = styled.div`
+export const PaginationWrapper = styled.div`
   padding: 12px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-top: 1px solid rgba(243, 244, 246, 1);
 `;
 
 const BodyCountry1 = styled.div`
@@ -233,7 +261,7 @@ const TableHeader = styled.div`
 const Wrapper = styled.div`
   color: black;
   padding: 24px;
-  border: 1px solid rgba(243, 244, 246, 1); ;
+  border: 1px solid rgba(243, 244, 246, 1);
 `;
 
 const Header = styled.div`

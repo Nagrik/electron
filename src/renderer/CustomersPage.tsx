@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import HeaderArrowIcon from './icons/HeaderArrowIcon';
+import { PaginationRow } from './OrdersPage';
+import Pagination from './Pagination';
 
 type Customer = {
   Address: string;
@@ -77,23 +79,15 @@ const CustomersPage = () => {
                 </TableRow>
               ))}
               <PaginationWrapper>
-                <PaginationNumberWrapper>
-                  {Array.from(
-                    { length: Math.ceil(customers?.count / 20) },
-                    (_, i) => i + 1
-                  ).map((number) => {
-                    return (
-                      <PaginationNumber
-                        active={number === currentPage}
-                        onClick={() => {
-                          setCurrentPage(number);
-                        }}
-                      >
-                        {number}
-                      </PaginationNumber>
-                    );
-                  })}
-                </PaginationNumberWrapper>
+                <PaginationRow>
+                  <Pagination
+                    className="pagination-bar"
+                    currentPage={currentPage}
+                    totalCount={customers.count}
+                    pageSize={20}
+                    onPageChange={(page: any) => setCurrentPage(page)}
+                  />
+                </PaginationRow>
                 <PageCount>
                   Page: {currentPage} of {Math.ceil(customers?.count / 20)}
                 </PageCount>

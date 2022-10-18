@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import HeaderArrowIcon from './icons/HeaderArrowIcon';
+import Pagination from './Pagination';
+import { PaginationRow, PaginationWrapper } from './OrdersPage';
 
 type Supplier = {
   Address: string;
@@ -82,23 +84,15 @@ const SuppliersPage = () => {
                 );
               })}
               <PaginationWrapper>
-                <PaginationNumberWrapper>
-                  {Array.from(
-                    { length: Math.ceil(suppliers?.count / 20) },
-                    (_, i) => i + 1
-                  ).map((number) => {
-                    return (
-                      <PaginationNumber
-                        active={number === currentPage}
-                        onClick={() => {
-                          setCurrentPage(number);
-                        }}
-                      >
-                        {number}
-                      </PaginationNumber>
-                    );
-                  })}
-                </PaginationNumberWrapper>
+                <PaginationRow>
+                  <Pagination
+                    className="pagination-bar"
+                    currentPage={currentPage}
+                    totalCount={suppliers.count}
+                    pageSize={20}
+                    onPageChange={(page: any) => setCurrentPage(page)}
+                  />
+                </PaginationRow>
                 <PageCount>
                   Page: {currentPage} of {Math.ceil(suppliers?.count / 20)}
                 </PageCount>
@@ -132,13 +126,6 @@ const PaginationNumber = styled.div<{ active: boolean }>`
   border: ${({ active }) =>
     active ? '1px solid rgba(209, 213, 219, 1)' : 'none'};
   margin-right: 8px;
-`;
-
-const PaginationWrapper = styled.div`
-  padding: 12px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 `;
 
 const Circle = styled.div`
