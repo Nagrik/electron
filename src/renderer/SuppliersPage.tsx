@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { createAvatar } from '@dicebear/avatars';
+import * as style from '@dicebear/avatars-initials-sprites';
+import Svg from 'react-inlinesvg';
 import HeaderArrowIcon from './icons/HeaderArrowIcon';
 import Pagination from './Pagination';
 import { PaginationRow, PaginationWrapper } from './OrdersPage';
@@ -20,6 +23,7 @@ type Supplier = {
   PostalCode: string;
   Region: string;
   SupplierID: null;
+  image: string;
 };
 
 const SuppliersPage = () => {
@@ -37,15 +41,7 @@ const SuppliersPage = () => {
         return res.data;
       });
   }, [currentPage]);
-  const getInitials = function (string: string) {
-    const names = string.split(' ');
-    let initials = names[0].substring(0, 1).toUpperCase();
 
-    if (names.length > 1) {
-      initials += names[names.length - 1].substring(0, 1).toUpperCase();
-    }
-    return initials;
-  };
   return (
     <Wrapper>
       {suppliers ? (
@@ -64,11 +60,17 @@ const SuppliersPage = () => {
               <Country>Country</Country>
             </TableHeader>
             <TableBody>
-              {suppliers?.page.map((supplier: Supplier) => {
+              {suppliers.page.map((supplier: Supplier) => {
+                const svg = createAvatar(style, {
+                  seed: supplier.ContactName,
+                  // ... and other options
+                });
                 return (
                   <TableRow>
                     <BodyIcon>
-                      <Circle>{getInitials(supplier.ContactName)}</Circle>
+                      <Circle>
+                        <Svg src={svg} />
+                      </Circle>
                     </BodyIcon>
                     <BodyCompany>
                       <Link to={`/supplier/${supplier.SupplierID}`}>
@@ -131,6 +133,7 @@ const PaginationNumber = styled.div<{ active: boolean }>`
 const Circle = styled.div`
   width: 24px;
   height: 24px;
+  overflow: hidden;
   background-color: cadetblue;
   border-radius: 50%;
   color: white;

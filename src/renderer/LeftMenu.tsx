@@ -257,6 +257,7 @@ const LeftMenuHeader = styled.div`
 `;
 
 const LeftMenuHeaderTitle = styled.div`
+  color: white;
   span {
     font-weight: 900;
   }

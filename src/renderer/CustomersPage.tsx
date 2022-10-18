@@ -2,6 +2,9 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import Svg from 'react-inlinesvg';
+import { createAvatar } from '@dicebear/avatars';
+import * as style from '@dicebear/avatars-initials-sprites';
 import HeaderArrowIcon from './icons/HeaderArrowIcon';
 import { PaginationRow } from './OrdersPage';
 import Pagination from './Pagination';
@@ -61,23 +64,31 @@ const CustomersPage = () => {
               <Country>Country</Country>
             </TableHeader>
             <TableBody>
-              {customers?.page.map((customer: Customer) => (
-                <TableRow>
-                  <BodyIcon>
-                    <Circle>{getInitials(customer.ContactName)}</Circle>
-                  </BodyIcon>
-                  <BodyCompany>
-                    <Link to={`/customer/${customer.CustomerID}`}>
-                      {customer.CompanyName}
-                    </Link>
-                  </BodyCompany>
+              {customers?.page.map((customer: Customer) => {
+                const svg = createAvatar(style, {
+                  seed: customer.ContactName,
+                  // ... and other options
+                });
+                return (
+                  <TableRow>
+                    <BodyIcon>
+                      <Circle>
+                        <Svg src={svg} />
+                      </Circle>
+                    </BodyIcon>
+                    <BodyCompany>
+                      <Link to={`/customer/${customer.CustomerID}`}>
+                        {customer.CompanyName}
+                      </Link>
+                    </BodyCompany>
 
-                  <BodyContact>{customer.ContactName}</BodyContact>
-                  <BodyTitle>{customer.ContactTitle}</BodyTitle>
-                  <BodyCity>{customer.City}</BodyCity>
-                  <BodyCountry>{customer.Country}</BodyCountry>
-                </TableRow>
-              ))}
+                    <BodyContact>{customer.ContactName}</BodyContact>
+                    <BodyTitle>{customer.ContactTitle}</BodyTitle>
+                    <BodyCity>{customer.City}</BodyCity>
+                    <BodyCountry>{customer.Country}</BodyCountry>
+                  </TableRow>
+                );
+              })}
               <PaginationWrapper>
                 <PaginationRow>
                   <Pagination
@@ -135,6 +146,7 @@ const Circle = styled.div`
   height: 24px;
   background-color: cadetblue;
   border-radius: 50%;
+  overflow: hidden;
   color: white;
   font-size: 10px;
   display: flex;
