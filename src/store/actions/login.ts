@@ -10,7 +10,7 @@ export const setQuery =
   (response: any): AsyncAction =>
   async (dispatch: any) => {
     try {
-      dispatch(loginActions.setQueryResponse(response));
+      dispatch(loginActions.setQueryResponseDashboard(response));
     } catch (e) {
       // console.log(e);
     }

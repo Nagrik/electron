@@ -11,6 +11,7 @@ import Customer from './Customer';
 import SearchPage from './SearchPage';
 import Order from './Order';
 import Product from './Product';
+import DashboardPage from './DashboardPage';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/suppliers" element={<SuppliersPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/supplier/:id" element={<Supplier />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/product/:id" element={<Product />} />

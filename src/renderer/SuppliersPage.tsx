@@ -6,9 +6,11 @@ import styled from 'styled-components';
 import { createAvatar } from '@dicebear/avatars';
 import * as style from '@dicebear/avatars-initials-sprites';
 import Svg from 'react-inlinesvg';
+import { useDispatch } from 'react-redux';
 import HeaderArrowIcon from './icons/HeaderArrowIcon';
 import Pagination from './Pagination';
 import { PaginationRow, PaginationWrapper } from './OrdersPage';
+import { setQuery } from '../store/actions/login';
 
 type Supplier = {
   Address: string;
@@ -29,7 +31,11 @@ type Supplier = {
 const SuppliersPage = () => {
   const [suppliers, setSuppliers] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-
+  const dispatch = useDispatch();
+  const obj = {
+    query: suppliers?.queries,
+    time: new Date().toISOString(),
+  };
   useEffect(() => {
     axios
       .get(
@@ -41,6 +47,12 @@ const SuppliersPage = () => {
         return res.data;
       });
   }, [currentPage]);
+
+  useEffect(() => {
+    if (suppliers?.queries?.length > 0) {
+      dispatch(setQuery(obj));
+    }
+  }, [suppliers]);
 
   return (
     <Wrapper>

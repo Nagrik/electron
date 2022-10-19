@@ -49,7 +49,7 @@ const ProductsPage = () => {
     }
   }, [products]);
   const query = useSelector(selectQuery);
-
+  console.log(query);
   return (
     <Wrapper>
       {products ? (
@@ -241,3 +241,6 @@ const HeaderTitle = styled.div`
   font-size: 16px;
   font-weight: 700;
 `;
+function setQueryResponseDashboard(obj: { query: any; time: string }): any {
+  throw new Error('Function not implemented.');
+}

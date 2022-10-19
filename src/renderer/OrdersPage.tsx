@@ -50,11 +50,6 @@ const OrdersPage = () => {
       dispatch(setQuery(obj));
     }
   }, [orders]);
-  const query = useSelector(selectQuery);
-  const arr = Array.from(
-    { length: Math.ceil(orders?.count / 20) },
-    (_, i) => i + 1
-  );
 
   return (
     <Wrapper>

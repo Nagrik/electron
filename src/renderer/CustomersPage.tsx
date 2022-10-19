@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 import Svg from 'react-inlinesvg';
 import { createAvatar } from '@dicebear/avatars';
 import * as style from '@dicebear/avatars-initials-sprites';
+import { useDispatch } from 'react-redux';
 import HeaderArrowIcon from './icons/HeaderArrowIcon';
 import { PaginationRow } from './OrdersPage';
 import Pagination from './Pagination';
+import { setQuery } from '../store/actions/login';
 
 type Customer = {
   Address: string;
@@ -26,6 +28,17 @@ type Customer = {
 const CustomersPage = () => {
   const [customers, setCustomers] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const dispatch = useDispatch();
+  const obj = {
+    query: customers?.queries,
+    time: new Date().toISOString(),
+  };
+
+  useEffect(() => {
+    if (customers?.queries?.length > 0) {
+      dispatch(setQuery(obj));
+    }
+  }, [customers]);
   useEffect(() => {
     axios
       .get(
@@ -37,15 +50,6 @@ const CustomersPage = () => {
         return res.data;
       });
   }, [currentPage]);
-  const getInitials = function (string: string) {
-    const names = string.split(' ');
-    let initials = names[0].substring(0, 1).toUpperCase();
-
-    if (names.length > 1) {
-      initials += names[names.length - 1].substring(0, 1).toUpperCase();
-    }
-    return initials;
-  };
   return (
     <Wrapper>
       {customers ? (

@@ -16,7 +16,6 @@ import LinkIcon from './icons/LinkIcon';
 
 const Home = ({ children }: any) => {
   const location = useLocation();
-  console.log(location.pathname);
   const [timer, setTimer] = useState<any>(
     new Date().toLocaleTimeString('en-US', {
       hour12: false,
