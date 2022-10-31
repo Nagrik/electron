@@ -26,7 +26,7 @@ type Product = {
 const ProductsPage = () => {
   const [products, setProducts] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const obj = {
     query: products?.queries,
     time: new Date().toISOString(),

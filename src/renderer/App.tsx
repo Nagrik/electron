@@ -13,6 +13,8 @@ import Order from './Order';
 import Product from './Product';
 import DashboardPage from './DashboardPage';
 import Documentation from './Documentation';
+import EmployeesPage from './EmployeesPage';
+import Employees from './Employees';
 
 export default function App() {
   return (
@@ -25,6 +27,8 @@ export default function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/supplier/:id" element={<Supplier />} />
             <Route path="/products" element={<ProductsPage />} />
+            <Route path="/employees" element={<EmployeesPage />} />
+            <Route path="/employee/:id" element={<Employees />} />
             <Route path="/product/:id" element={<Product />} />
             <Route path="/orders" element={<OrdersPage />} />
             <Route path="/order/:id" element={<Order />} />

@@ -1,99 +1,127 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { createAvatar } from '@dicebear/avatars';
 import * as style from '@dicebear/avatars-initials-sprites';
 import Svg from 'react-inlinesvg';
-import { useDispatch } from 'react-redux';
 import HeaderArrowIcon from './icons/HeaderArrowIcon';
-import Pagination from './Pagination';
-import { PaginationRow, PaginationWrapper } from './OrdersPage';
 import { setQuery } from '../store/actions/login';
+import { selectQuery } from '../store/selectors/auth';
+import { PaginationRow } from './OrdersPage';
+import Pagination from './Pagination';
 
-type Supplier = {
+type Page = {
+  EmployeeID: number;
+  LastName: string;
+  FirstName: string;
+  Title: string;
+  TitleOfCourtesy: string;
+  BirthDate: string;
+  HireDate: string;
   Address: string;
   City: string;
-  CompanyName: string;
-  ContactName: string;
-  ContactTitle: string;
-  Country: string;
-  Fax: string;
-  HomePage: string;
-  Phone: string;
-  PostalCode: string;
   Region: string;
-  SupplierID: null;
-  image: string;
+  PostalCode: string;
+  Country: string;
+  HomePhone: string;
+  Extension: number;
+  Notes: string;
+  ReportsTo: number;
 };
 
-const SuppliersPage = () => {
-  const [suppliers, setSuppliers] = useState<any>(null);
+type Product = {
+  queries: [
+    {
+      query: string;
+      metrics: {
+        select: number;
+        selectWhere: number;
+        selectJoin: number;
+        executionTime: number;
+      };
+    },
+    {
+      query: string;
+      metrics: {
+        select: number;
+        selectWhere: number;
+        selectJoin: number;
+        executionTime: number;
+      };
+    }
+  ];
+  count: number;
+  page: Array<Page>;
+};
+
+const EmployeesPage = () => {
+  const [products, setProducts] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const dispatch = useDispatch<any>();
   const obj = {
-    query: suppliers?.queries,
+    query: products?.queries,
     time: new Date().toISOString(),
   };
   useEffect(() => {
     axios
       .get(
-        `https://therealyo-northwind.herokuapp.com/suppliers?page=${currentPage}`
+        `https://therealyo-northwind.herokuapp.com/employees?page=${currentPage}`
       )
       .then((res) => {
         // console.log(res);
-        setSuppliers(res.data);
+        setProducts(res.data);
         return res.data;
       });
   }, [currentPage]);
 
   useEffect(() => {
-    if (suppliers?.queries?.length > 0) {
+    if (products?.queries?.length > 0) {
       dispatch(setQuery(obj));
     }
-  }, [suppliers]);
-
+  }, [products]);
+  const query = useSelector(selectQuery);
+  console.log(query);
   return (
     <Wrapper>
-      {suppliers ? (
+      {products ? (
         <>
           <Header>
-            <HeaderTitle>Suppliers</HeaderTitle>
+            <HeaderTitle>Products</HeaderTitle>
             <HeaderArrowIcon />
           </Header>
           <Table>
             <TableHeader>
               <Icon />
-              <Company>Company</Company>
-              <Contact>Contact</Contact>
-              <Title>Title</Title>
-              <City>City</City>
+              <Company> Name</Company>
+              <Contact> Title</Contact>
+              <Title>City</Title>
+              <City>Phone</City>
               <Country>Country</Country>
             </TableHeader>
             <TableBody>
-              {suppliers.page.map((supplier: Supplier) => {
+              {products?.page.map((product: Page, i: number) => {
                 const svg = createAvatar(style, {
-                  seed: supplier.ContactName,
-                  // ... and other options
+                  seed: product.FirstName + product.LastName,
                 });
                 return (
-                  <TableRow>
+                  <TableRow key={i}>
                     <BodyIcon>
                       <Circle>
                         <Svg src={svg} />
                       </Circle>
                     </BodyIcon>
                     <BodyCompany>
-                      <Link to={`/supplier/${supplier.SupplierID}`}>
-                        {supplier.CompanyName}
+                      <Link to={`/employee/${product.EmployeeID}`}>
+                        {product.FirstName} {product.LastName}
                       </Link>
                     </BodyCompany>
-
-                    <BodyContact>{supplier.ContactName}</BodyContact>
-                    <BodyTitle>{supplier.ContactTitle}</BodyTitle>
-                    <BodyCity>{supplier.City}</BodyCity>
-                    <BodyCountry>{supplier.Country}</BodyCountry>
+                    <BodyContact>{product.Title}</BodyContact>
+                    <BodyTitle>{product.City}</BodyTitle>
+                    <BodyCity>{product.HomePhone}</BodyCity>
+                    <BodyCountry>{product.Country}</BodyCountry>
                   </TableRow>
                 );
               })}
@@ -102,45 +130,26 @@ const SuppliersPage = () => {
                   <Pagination
                     className="pagination-bar"
                     currentPage={currentPage}
-                    totalCount={suppliers.count}
+                    totalCount={products.count}
                     pageSize={20}
                     onPageChange={(page: any) => setCurrentPage(page)}
                   />
                 </PaginationRow>
                 <PageCount>
-                  Page: {currentPage} of {Math.ceil(suppliers?.count / 20)}
+                  Page: {currentPage} of {Math.ceil(products?.count / 20)}
                 </PageCount>
               </PaginationWrapper>
             </TableBody>
           </Table>
         </>
       ) : (
-        <div style={{ color: '#000' }}>Loading suppliers...</div>
+        <div style={{ color: '#000' }}>Loading products...</div>
       )}
     </Wrapper>
   );
 };
 
-export default SuppliersPage;
-
-const PageCount = styled.div`
-  font-size: 12.8px;
-`;
-
-const PaginationNumberWrapper = styled.div`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  border: 1px solid rgba(243, 244, 246, 1);
-`;
-
-const PaginationNumber = styled.div<{ active: boolean }>`
-  width: 7px;
-  padding: 10px 16px;
-  border: ${({ active }) =>
-    active ? '1px solid rgba(209, 213, 219, 1)' : 'none'};
-  margin-right: 8px;
-`;
+export default EmployeesPage;
 
 const Circle = styled.div`
   width: 24px;
@@ -163,13 +172,39 @@ const BodyIcon = styled.div`
   justify-content: center;
   //border: 1px solid #000;
 `;
+const PageCount = styled.div`
+  font-size: 12.8px;
+`;
+
+const PaginationNumberWrapper = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(243, 244, 246, 1);
+`;
+
+const PaginationNumber = styled.div<{ active: boolean }>`
+  width: 7px;
+  padding: 10px 16px;
+  border: ${({ active }) =>
+    active ? '1px solid rgba(209, 213, 219, 1)' : 'none'};
+  margin-right: 8px;
+`;
+
+const PaginationWrapper = styled.div`
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const BodyCompany = styled.div`
-  width: 30%;
+  width: 25%;
   padding: 9px 12px;
   //border: 1px solid #000;
 `;
 const BodyContact = styled.div`
-  width: 15%;
+  width: 25%;
   padding: 9px 12px;
   //border: 1px solid #000;
 `;
@@ -179,12 +214,12 @@ const BodyTitle = styled.div`
   //border: 1px solid #000;
 `;
 const BodyCity = styled.div`
-  width: 15%;
+  width: 20%;
   padding: 9px 12px;
   //border: 1px solid #000;
 `;
 const BodyCountry = styled.div`
-  width: 13%;
+  width: 8%;
   padding: 9px 12px;
   //border: 1px solid #000;
 `;
@@ -215,13 +250,13 @@ const Icon = styled.div`
 `;
 
 const Company = styled.div`
-  width: 30%;
+  width: 25%;
   font-size: 16px;
   font-weight: 700;
   padding: 9px 12px;
 `;
 const Contact = styled.div`
-  width: 15%;
+  width: 25%;
   font-size: 16px;
   padding: 9px 12px;
   font-weight: 700;
@@ -233,13 +268,13 @@ const Title = styled.div`
   padding: 9px 12px;
 `;
 const City = styled.div`
-  width: 15%;
+  width: 20%;
   font-size: 16px;
   font-weight: 700;
   padding: 9px 12px;
 `;
 const Country = styled.div`
-  width: 15%;
+  width: 10%;
   font-size: 16px;
   font-weight: 700;
   padding: 9px 12px;
@@ -273,3 +308,6 @@ const HeaderTitle = styled.div`
   font-size: 16px;
   font-weight: 700;
 `;
+function setQueryResponseDashboard(obj: { query: any; time: string }): any {
+  throw new Error('Function not implemented.');
+}

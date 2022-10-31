@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import SearchIcon from './icons/SearchIcon';
 import useOnClickOutside from './hooks/useOnClickOutside';
 
@@ -143,7 +144,9 @@ const SearchPage = () => {
           ? searchResponseCustomer.data.map((product) => (
               <SearchResult>
                 <SearchResultMainTitle>
-                  <a href="/">{product.ContactName}</a>
+                  <Link to={`/customer/${product.CustomerID}`}>
+                    {product.ContactName}
+                  </Link>
                 </SearchResultMainTitle>
                 <SearchResultMainSubtitle>
                   #${product.CustomerID}, Contact:
@@ -167,7 +170,9 @@ const SearchPage = () => {
           ? searchResponseProducts.data.map((product) => (
               <SearchResult>
                 <SearchResultMainTitle>
-                  <a href="/">{product.ProductName}</a>
+                  <Link to={`/product/${product.ProductID}`}>
+                    {product.ProductName}
+                  </Link>
                 </SearchResultMainTitle>
                 <SearchResultMainSubtitle>
                   #${product.ProductID}, Quantity Per Unit: $
