@@ -37,75 +37,89 @@ const Product = () => {
   }, []);
   return (
     <Wrapper>
-      <Body>
-        <Header>
-          <Ballot />
-          <HeaderTitle>Product information</HeaderTitle>
-        </Header>
-        <BodyContent>
-          <BodyContentLeft>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Product Name</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {productData?.data.ProductName}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Supplier</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {productData?.data.Supplier}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>
-                Quantity Per Unit
-              </BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {productData?.data.QuantityPerUnit}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Unit Price</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {productData?.data.UnitPrice}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-          </BodyContentLeft>
-          <BodyContentRight>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>
-                Units In Stock
-              </BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {productData?.data.UnitsInStock}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>
-                Units In Order
-              </BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {productData?.data.UnitsOnOrder}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Reorder Level</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {productData?.data.ReorderLevel}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Discontinued</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {productData?.data.Discontinued}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-          </BodyContentRight>
-        </BodyContent>
-      </Body>
-      <Footer>
-        <FooterButton onClick={goBack}>Go back</FooterButton>
-      </Footer>
+      {productData ? (
+        <>
+          <Body>
+            <Header>
+              <Ballot />
+              <HeaderTitle>Product information</HeaderTitle>
+            </Header>
+            <BodyContent>
+              <BodyContentLeft>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>
+                    Product Name
+                  </BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {productData?.data.ProductName}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>Supplier</BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {productData?.data.Supplier}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>
+                    Quantity Per Unit
+                  </BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {productData?.data.QuantityPerUnit}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>
+                    Unit Price
+                  </BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {productData?.data.UnitPrice}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+              </BodyContentLeft>
+              <BodyContentRight>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>
+                    Units In Stock
+                  </BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {productData?.data.UnitsInStock}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>
+                    Units In Order
+                  </BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {productData?.data.UnitsOnOrder}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>
+                    Reorder Level
+                  </BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {productData?.data.ReorderLevel}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>
+                    Discontinued
+                  </BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {productData?.data.Discontinued}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+              </BodyContentRight>
+            </BodyContent>
+          </Body>
+          <Footer>
+            <FooterButton onClick={goBack}>Go back</FooterButton>
+          </Footer>
+        </>
+      ) : (
+        <div style={{ color: '#000' }}>Loading product...</div>
+      )}
     </Wrapper>
   );
 };

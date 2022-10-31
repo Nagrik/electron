@@ -52,7 +52,7 @@ const Supplier = () => {
                     Company Name
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData?.data.CompanyName}
+                    {supplierData.data.CompanyName}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -60,7 +60,7 @@ const Supplier = () => {
                     Contact Name
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData?.data.ContactName}
+                    {supplierData.data.ContactName}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -68,19 +68,19 @@ const Supplier = () => {
                     Contact Title
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData?.data.ContactTitle}
+                    {supplierData.data.ContactTitle}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Address</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData?.data.Address}
+                    {supplierData.data.Address}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>City</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData?.data.City}
+                    {supplierData.data.City}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentLeft>
@@ -88,7 +88,7 @@ const Supplier = () => {
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Region</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData?.data.Region}
+                    {supplierData.data.Region}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -96,19 +96,19 @@ const Supplier = () => {
                     Postal Code
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData?.data.PostalCode}
+                    {supplierData.data.PostalCode}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Country</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData?.data.Country}
+                    {supplierData.data.Country}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Phone</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData?.data.Phone}
+                    {supplierData.data.Phone}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentRight>
@@ -119,7 +119,7 @@ const Supplier = () => {
           </Footer>
         </>
       ) : (
-        <div style={{ color: '#000' }}>Loading suppliers...</div>
+        <div style={{ color: '#000' }}>Loading supplier...</div>
       )}
     </Wrapper>
   );

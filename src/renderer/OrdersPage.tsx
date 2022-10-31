@@ -20,9 +20,9 @@ type Order = {
   ShipName: string;
   ShipVia: number;
   ShippedDate: string;
-  totalprice: number;
-  totalproducts: string;
-  totalquantity: string;
+  TotalPrice: number;
+  TotalProducts: string;
+  TotalQuantity: string;
   ShipCountry: string;
 };
 
@@ -33,7 +33,7 @@ const OrdersPage = () => {
     query: orders?.queries,
     time: new Date().toISOString(),
   };
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   useEffect(() => {
     axios
       .get(
@@ -76,9 +76,9 @@ const OrdersPage = () => {
                   <BodyCompany>
                     <Link to={`/order/${order.OrderID}`}>{order.OrderID}</Link>
                   </BodyCompany>
-                  <BodyContact>{order.totalprice}</BodyContact>
-                  <BodyTitle>{order.totalproducts}</BodyTitle>
-                  <BodyCity>{order.totalquantity}</BodyCity>
+                  <BodyContact>{order.TotalPrice}</BodyContact>
+                  <BodyTitle>{order.TotalProducts}</BodyTitle>
+                  <BodyCity>{order.TotalQuantity}</BodyCity>
                   <BodyCountry>
                     {order.ShippedDate
                       ? format(new Date(order.ShippedDate), 'yyyy-LL-dd')

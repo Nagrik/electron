@@ -12,6 +12,7 @@ import SearchPage from './SearchPage';
 import Order from './Order';
 import Product from './Product';
 import DashboardPage from './DashboardPage';
+import Documentation from './Documentation';
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="/customers" element={<CustomersPage />} />
             <Route path="/customer/:id" element={<Customer />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/documentation" element={<Documentation />} />
           </Routes>
         </Home>
       </Router>

@@ -6,6 +6,7 @@ import { DashObjType } from '../store/reducers/auth';
 
 const DashboardPage = () => {
   const query = useSelector(selectQuery);
+  console.log(query);
   return (
     <Wrapper>
       <TopContentWrapper>
@@ -30,11 +31,11 @@ const DashboardPage = () => {
         </MainContentSubTitle>
         <MainContentLogs>
           {query?.map((item: DashObjType) =>
-            item.query?.map((itemQuery: string) => {
+            item.query?.map((itemQuery: any) => {
               return (
                 <Log>
                   <LogsInfo>{item.time}</LogsInfo>
-                  <LogString>{itemQuery}</LogString>
+                  <LogString>{itemQuery.query}</LogString>
                 </Log>
               );
             })

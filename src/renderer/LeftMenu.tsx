@@ -13,6 +13,7 @@ import SearchIcon from './icons/SearchIcon';
 import MenuIcon from './icons/MenuIcon';
 import ArrowDownIcon from './icons/ArrowDownIcon';
 import LinkIcon from './icons/LinkIcon';
+import InfoIcon from './icons/InfoIcon';
 
 const Home = ({ children }: any) => {
   const location = useLocation();
@@ -63,6 +64,11 @@ const Home = ({ children }: any) => {
       title: 'Customers',
       icon: <CustomersIcon />,
       route: '/customers',
+    },
+    {
+      title: 'Documentation',
+      icon: <InfoIcon />,
+      route: '/documentation',
     },
     {
       title: 'Search',

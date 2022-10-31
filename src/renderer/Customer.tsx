@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Ballot from './icons/Ballot';
 
-type Customer = {
+type CustomerType = {
   Address: string;
   City: string;
   CompanyName: string;
@@ -22,10 +22,10 @@ const Customer = () => {
   const navigation = useNavigate();
   const { id } = useParams();
   const goBack = () => {
-    navigation('/suppliers');
+    navigation('/customers');
   };
 
-  const [customerData, setCustomerData] = useState<Customer | null>(null);
+  const [customerData, setCustomerData] = useState<CustomerType | null>(null);
   useEffect(() => {
     axios
       .get(`https://therealyo-northwind.herokuapp.com/customer?id=${id}`)
@@ -35,75 +35,89 @@ const Customer = () => {
   }, []);
   return (
     <Wrapper>
-      <Body>
-        <Header>
-          <Ballot />
-          <HeaderTitle>Supplier information</HeaderTitle>
-        </Header>
-        <BodyContent>
-          <BodyContentLeft>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Company Name</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {customerData?.CompanyName}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Contact Name</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {customerData?.ContactName}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Contact Title</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {customerData?.ContactTitle}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Address</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {customerData?.Address}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>City</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {customerData?.City}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-          </BodyContentLeft>
-          <BodyContentRight>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Region</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {customerData?.Region}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Postal Code</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {customerData?.PostalCode}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Country</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {customerData?.Country}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-            <BodyContentLeftItem>
-              <BodyContentLeftItemTitle>Phone</BodyContentLeftItemTitle>
-              <BodyContentLeftItemValue>
-                {customerData?.Phone}
-              </BodyContentLeftItemValue>
-            </BodyContentLeftItem>
-          </BodyContentRight>
-        </BodyContent>
-      </Body>
-      <Footer>
-        <FooterButton onClick={goBack}>Go back</FooterButton>
-      </Footer>
+      {customerData ? (
+        <>
+          <Body>
+            <Header>
+              <Ballot />
+              <HeaderTitle>Supplier information</HeaderTitle>
+            </Header>
+            <BodyContent>
+              <BodyContentLeft>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>
+                    Company Name
+                  </BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {customerData?.CompanyName}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>
+                    Contact Name
+                  </BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {customerData?.ContactName}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>
+                    Contact Title
+                  </BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {customerData?.ContactTitle}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>Address</BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {customerData?.Address}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>City</BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {customerData?.City}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+              </BodyContentLeft>
+              <BodyContentRight>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>Region</BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {customerData?.Region}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>
+                    Postal Code
+                  </BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {customerData?.PostalCode}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>Country</BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {customerData?.Country}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+                <BodyContentLeftItem>
+                  <BodyContentLeftItemTitle>Phone</BodyContentLeftItemTitle>
+                  <BodyContentLeftItemValue>
+                    {customerData?.Phone}
+                  </BodyContentLeftItemValue>
+                </BodyContentLeftItem>
+              </BodyContentRight>
+            </BodyContent>
+          </Body>
+          <Footer>
+            <FooterButton onClick={goBack}>Go back</FooterButton>
+          </Footer>
+        </>
+      ) : (
+        <div style={{ color: '#000' }}>Loading customer...</div>
+      )}
     </Wrapper>
   );
 };

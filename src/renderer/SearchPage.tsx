@@ -1,14 +1,97 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import SearchIcon from './icons/SearchIcon';
 import useOnClickOutside from './hooks/useOnClickOutside';
 
+type SearchResponseProducts = {
+  queries: [
+    {
+      query: string;
+      metrics: {
+        select: number;
+        selectWhere: number;
+        selectJoin: number;
+        executionTime: number;
+      };
+    }
+  ];
+  data: [
+    {
+      ProductID: number;
+      ProductName: string;
+      SupplierID: number;
+      CategoryID: number;
+      QuantityPerUnit: string;
+      UnitPrice: string;
+      UnitsInStock: number;
+      UnitsOnOrder: number;
+      ReorderLevel: number;
+      Discontinued: number;
+    }
+  ];
+};
+
+type SearchResponseCustomer = {
+  queries: [
+    {
+      query: string;
+      metrics: {
+        select: number;
+        selectWhere: number;
+        selectJoin: number;
+        executionTime: number;
+      };
+    }
+  ];
+  data: [
+    {
+      CustomerID: string;
+      CompanyName: string;
+      ContactName: string;
+      ContactTitle: string;
+      Address: string;
+      City: string;
+      Region: string;
+      PostalCode: string;
+      Country: string;
+      Phone: string;
+      Fax: string;
+    }
+  ];
+};
+
 const SearchPage = () => {
   const [inputActive, setInputActive] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [searchResponseProducts, setSearchResponseProducts] =
+    useState<SearchResponseProducts | null>(null);
+  const [searchResponseCustomer, setSearchResponseCustomer] =
+    useState<SearchResponseCustomer | null>(null);
+  const [isProductsActive, setIsProductsActive] = useState<boolean>(false);
   const inputRef = useOnClickOutside(() => {
     setInputActive(false);
   });
-  const [isProductsActive, setIsProductsActive] = useState<boolean>(false);
+
+  const handleInput = (e: any) => {
+    setInputValue(e.target.value);
+    if (e.key === 'Enter') {
+      axios
+        .get(
+          `https://therealyo-northwind.herokuapp.com/searchProduct?search=${inputValue}`
+        )
+        .then((res) => {
+          setSearchResponseProducts(res.data);
+        });
+      axios
+        .get(
+          `https://therealyo-northwind.herokuapp.com/searchCustomer?search=${inputValue}`
+        )
+        .then((res) => {
+          setSearchResponseCustomer(res.data);
+        });
+    }
+  };
   return (
     <Wrapper>
       <Content>
@@ -21,7 +104,11 @@ const SearchPage = () => {
           <Icon>
             <SearchIcon />
           </Icon>
-          <Input placeholder="Enter keyword..." />
+          <Input
+            placeholder="Enter keyword..."
+            onChange={(e) => handleInput(e)}
+            onKeyPress={(e) => handleInput(e)}
+          />
         </InputWrapper>
         <ContentTitle>Tables</ContentTitle>
         <TableWrapper>
@@ -34,7 +121,7 @@ const SearchPage = () => {
               </CircleActive>
             )}
 
-            <TableTitle>Suppliers</TableTitle>
+            <TableTitle>Products</TableTitle>
           </Choice>
           <Choice onClick={() => setIsProductsActive(false)}>
             {isProductsActive ? (
@@ -50,14 +137,54 @@ const SearchPage = () => {
         <SearchResultTitle style={{ fontSize: '18px' }}>
           Search results
         </SearchResultTitle>
-        <SearchResult>
-          <SearchResultMainTitle>
-            <a href="/">Gula Malacca</a>
-          </SearchResultMainTitle>
-          <SearchResultMainSubtitle>
-            #1, Quantity Per Unit: 20 - 2 kg bags, Price: 19.45, Stock: 27
-          </SearchResultMainSubtitle>
-        </SearchResult>
+        {!isProductsActive &&
+        searchResponseCustomer &&
+        searchResponseCustomer.data.length > 1
+          ? searchResponseCustomer.data.map((product) => (
+              <SearchResult>
+                <SearchResultMainTitle>
+                  <a href="/">{product.ContactName}</a>
+                </SearchResultMainTitle>
+                <SearchResultMainSubtitle>
+                  #${product.CustomerID}, Contact:
+                  {product.ContactName}, Title: ${product.ContactTitle}, Phone:
+                  ${product.Phone}
+                </SearchResultMainSubtitle>
+              </SearchResult>
+            ))
+          : !isProductsActive && (
+              <SearchResult>
+                <SearchResultMainTitle>
+                  <SearchResultMainSubtitle>
+                    No results
+                  </SearchResultMainSubtitle>
+                </SearchResultMainTitle>
+              </SearchResult>
+            )}
+        {isProductsActive &&
+        searchResponseProducts &&
+        searchResponseProducts.data.length > 1
+          ? searchResponseProducts.data.map((product) => (
+              <SearchResult>
+                <SearchResultMainTitle>
+                  <a href="/">{product.ProductName}</a>
+                </SearchResultMainTitle>
+                <SearchResultMainSubtitle>
+                  #${product.ProductID}, Quantity Per Unit: $
+                  {product.QuantityPerUnit}, Price: ${product.UnitPrice}, Stock:
+                  ${product.UnitsInStock}
+                </SearchResultMainSubtitle>
+              </SearchResult>
+            ))
+          : isProductsActive && (
+              <SearchResult>
+                <SearchResultMainTitle>
+                  <SearchResultMainSubtitle>
+                    No results
+                  </SearchResultMainSubtitle>
+                </SearchResultMainTitle>
+              </SearchResult>
+            )}
       </Content>
     </Wrapper>
   );
@@ -75,7 +202,9 @@ const SearchResultMainTitle = styled.div`
   padding-bottom: 5px;
 `;
 
-const SearchResult = styled.div``;
+const SearchResult = styled.div`
+  padding-bottom: 8px;
+`;
 
 const SearchResultTitle = styled.div`
   margin-top: 24px;
@@ -142,7 +271,7 @@ const InputWrapper = styled.div<{ active: boolean }>`
   display: flex;
   color: black;
   border: ${({ active }) =>
-    active ? '2px solid cadetblue' : '1px solid rgba(156, 163, 175, 1)'};
+    active ? '2px solid cadetblue' : '2px solid rgba(156, 163, 175, 1)'};
   width: 400px;
   padding: 5px 0;
   border-radius: 0.25rem;

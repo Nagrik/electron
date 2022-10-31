@@ -227,13 +227,13 @@ const Order = () => {
               </TableBody>
             </Table>
           </TableWrapper>
+          <Footer>
+            <FooterButton onClick={goBack}>Go back</FooterButton>
+          </Footer>
         </>
       ) : (
-        <h1>No such order</h1>
+        <div style={{ color: '#000' }}>Loading order...</div>
       )}
-      <Footer>
-        <FooterButton onClick={goBack}>Go back</FooterButton>
-      </Footer>
     </Wrapper>
   );
 };
