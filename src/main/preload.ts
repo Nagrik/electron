@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'ipc-example';
+// export type Channels = 'ipc-example';
 
 contextBridge.exposeInMainWorld('api', {
   ipcRenderer: {
@@ -18,6 +18,9 @@ contextBridge.exposeInMainWorld('api', {
     },
     once(channel: string, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
+    },
+    removeAllListeners(channel: string) {
+      ipcRenderer.removeAllListeners(channel);
     },
   },
 });

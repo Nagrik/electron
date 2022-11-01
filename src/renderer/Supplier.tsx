@@ -4,22 +4,37 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Ballot from './icons/Ballot';
 
-type SupplierType = {
-  queries: string[];
-  data: {
-    SupplierID: number;
-    CompanyName: string;
-    ContactName: string;
-    ContactTitle: string;
-    Address: string;
-    City: string;
-    Region: string;
-    PostalCode: string;
-    Country: string;
-    Phone: string;
-    Fax: string;
-    HomePage: string;
-  };
+// export type SupplierType = {
+//   queries: string[];
+//   data: {
+//     SupplierID: number;
+//     CompanyName: string;
+//     ContactName: string;
+//     ContactTitle: string;
+//     Address: string;
+//     City: string;
+//     Region: string;
+//     PostalCode: string;
+//     Country: string;
+//     Phone: string;
+//     Fax: string;
+//     HomePage: string;
+//   };
+// };
+
+export type SupplierType = {
+  SupplierID: number;
+  CompanyName: string;
+  ContactName: string;
+  ContactTitle: string;
+  Address: string;
+  City: string;
+  Region: string;
+  PostalCode: string;
+  Country: string;
+  Phone: string;
+  Fax: string;
+  HomePage: string;
 };
 
 const Supplier = () => {
@@ -29,13 +44,23 @@ const Supplier = () => {
     navigation('/suppliers');
   };
   const [supplierData, setSupplierData] = useState<SupplierType | null>(null);
+
+  // window.api.ipcRenderer()
   useEffect(() => {
-    axios
-      .get(`https://therealyo-northwind.herokuapp.com/supplier?id=${id}`)
-      .then((res: any) => {
-        setSupplierData(res.data);
-      });
+    window.api.ipcRenderer.send('ipc-example', []);
+    window.api.ipcRenderer.once('ipc-example', (arg: SupplierType) => {
+      setSupplierData(arg);
+    });
+    // axios
+    //   .get(`https://therealyo-northwind.herokuapp.com/supplier?id=${id}`)
+    //   .then((res: any) => {
+    //     setSupplierData(res.data);
+    //   });
+    return () => {
+      window.api.ipcRenderer.removeAllListeners('ping');
+    };
   }, []);
+
   return (
     <Wrapper>
       {supplierData ? (
@@ -52,7 +77,7 @@ const Supplier = () => {
                     Company Name
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.CompanyName}
+                    {supplierData.CompanyName}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -60,7 +85,7 @@ const Supplier = () => {
                     Contact Name
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.ContactName}
+                    {supplierData.ContactName}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -68,19 +93,19 @@ const Supplier = () => {
                     Contact Title
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.ContactTitle}
+                    {supplierData.ContactTitle}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Address</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.Address}
+                    {supplierData.Address}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>City</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.City}
+                    {supplierData.City}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentLeft>
@@ -88,7 +113,7 @@ const Supplier = () => {
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Region</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.Region}
+                    {supplierData.Region}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -96,19 +121,19 @@ const Supplier = () => {
                     Postal Code
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.PostalCode}
+                    {supplierData.PostalCode}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Country</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.Country}
+                    {supplierData.Country}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Phone</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.Phone}
+                    {supplierData.Phone}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentRight>

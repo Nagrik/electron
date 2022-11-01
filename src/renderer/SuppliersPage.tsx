@@ -32,10 +32,6 @@ const SuppliersPage = () => {
   const [suppliers, setSuppliers] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const dispatch = useDispatch<any>();
-  const obj = {
-    query: suppliers?.queries,
-    time: new Date().toISOString(),
-  };
   useEffect(() => {
     axios
       .get(
@@ -50,9 +46,13 @@ const SuppliersPage = () => {
 
   useEffect(() => {
     if (suppliers?.queries?.length > 0) {
+      const obj = {
+        query: suppliers?.queries,
+        time: new Date().toISOString(),
+      };
       dispatch(setQuery(obj));
     }
-  }, [suppliers]);
+  }, [suppliers, dispatch]);
 
   return (
     <Wrapper>
