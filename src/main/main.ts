@@ -12,8 +12,16 @@ import path from 'path';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { resolveHtmlPath } from './util';
+
+// import { ipcMain } from 'electron';
+// import MainWindow from '../renderer/backend/MainWindow';
+// import connect from '../renderer/backend/db/db';
+import cors from 'cors';
+import express, { Request, Response } from 'express';
 import connect from '../renderer/backend/db/db';
+// import MainWindow from '../renderer/backend/MainWindow';
+import { getSupplier } from './supplier.service';
+import { resolveHtmlPath } from './util';
 
 class AppUpdater {
   constructor() {
@@ -22,22 +30,43 @@ class AppUpdater {
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
+// let mainWindow: MainWindow | null = null;
+
+// global.shared = { ipcMain };
+// ipcMain.on('getSupplier', getSupplier);
+const expressApp = express();
+
+expressApp.use(express.json());
+expressApp.use(cors());
+
+expressApp.get('/getSupplier', async (req: Request, res: Response) => {
+  const connection = connect();
+  const data = await connection.query(
+    'SELECT * FROM suppliers WHERE suppliers."SupplierID"=$1',
+    [req.query.id]
+  );
+
+  res.send(data.rows[0]);
+});
+
+expressApp.listen(42500, () => {
+  console.log('express is up');
+});
+
+// ipcMain.on('getSupplier', async (event, id: string) => {
+//   const module = await import('../renderer/backend/getSupplier');
+//   const connection = await connect();
+//   const data = await connection.query(
+//     'SELECT * FROM suppliers WHERE suppliers."SupplierID"=$1',
+//     [id]
+//   );
+//   // console.log(data);
+//   await connection.end();
+//   // console.log(data.rows[0]);
+//   event.reply('getSupplier', data.rows[0]);
+// });
 
 let mainWindow: BrowserWindow | null = null;
-
-ipcMain.on('ipc-example', async (event, arg) => {
-  // const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  // console.log(msgTemplate(arg));
-  // event.reply('ipc-example', msgTemplate('pong'));
-  const connection = await connect();
-  const data = await connection.query(
-    'SELECT * FROM suppliers WHERE suppliers."SupplierID"=1'
-  );
-  // console.log(data);
-  await connection.end();
-  // console.log(data.rows[0]);
-  event.reply('ipc-example', data.rows[0]);
-});
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -53,6 +82,7 @@ if (isDebug) {
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
+  console.log(installer);
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = ['REACT_DEVELOPER_TOOLS'];
 
@@ -65,6 +95,8 @@ const installExtensions = async () => {
 };
 
 const createWindow = async () => {
+  // const test = new MainWindow();
+  // await test.installExtensions();
   if (isDebug) {
     await installExtensions();
   }
@@ -83,6 +115,8 @@ const createWindow = async () => {
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
@@ -117,10 +151,57 @@ const createWindow = async () => {
   new AppUpdater();
 };
 
-/**
- * Add event listeners...
- */
+// // // /**
+// // //  * Add event listeners...
+// // //  */
 
+// app.on('window-all-closed', () => {
+//   // Respect the OSX convention of having the application in memory even
+//   // after all windows have been closed
+//   if (process.platform !== 'darwin') {
+//     app.quit();
+//   }
+// });
+
+// app
+//   .whenReady()
+//   .then(() => {
+//     createWindow();
+//     // initListener();
+//     app.on('activate', () => {
+//       // On macOS it's common to re-create a window in the app when the
+//       // dock icon is clicked and there are no other windows open.
+//       if (mainWindow === null) createWindow();
+//     });
+//   })
+//   .catch(console.log);
+
+// app.on('window-all-closed', () => {
+//   if (process.platform !== 'darwin') {
+//     app.quit();
+//   }
+// });
+
+// app
+//   .whenReady()
+//   .then(() => {
+//     createWindow();
+//   })
+//   .catch(console.log);
+
+// async function createMainWindow() {
+//   // const settings = {
+//   //     title: "MEMENTO - Svelte, Tailwind, Electron & TypeScript"
+//   // };
+//   mainWindow = new MainWindow();
+//   mainWindow.createWindow();
+//   // const urlPage = path.join(__dirname, 'www', 'index.html');
+//   // mainWindow.createWindow(urlPage);
+
+//   // await mainWindow.setIpcMain([new GetSupplier()]);
+
+//   // updaterInfo.initAutoUpdater(autoUpdater, mainWindow.window);
+// }
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
@@ -132,11 +213,16 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
+    // mainWindow = new MainWindow();
     createWindow();
+    // initListener();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) createWindow();
+      if (mainWindow === null) {
+        // mainWindow = new MainWindow();
+        createWindow();
+      }
     });
   })
   .catch(console.log);

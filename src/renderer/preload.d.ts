@@ -7,13 +7,13 @@ declare global {
   interface Window {
     api: {
       ipcRenderer: {
-        send(channel: string, args: unknown[]): void;
+        send(channel: string, arg: string): void;
         on(
           channel: string,
           func: (...args: unknown[]) => void
         ): (() => void) | undefined;
         once(channel: string, func: (...args: unknown[]) => void): void;
-        getSupplier(channel: string, func: (arg: SupplierType) => void): void;
+        getSupplier(id: string): Promise<SupplierType>;
         removeAllListeners(channel: string): void;
       };
     };

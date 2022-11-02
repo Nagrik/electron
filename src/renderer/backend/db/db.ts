@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export default async (url?: string) => {
+export default (url?: string) => {
   return new Pool({
     connectionString: url || process.env.DATABASE_URL,
     ssl: {

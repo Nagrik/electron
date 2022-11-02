@@ -32,6 +32,7 @@ const SuppliersPage = () => {
   const [suppliers, setSuppliers] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const dispatch = useDispatch<any>();
+  // console.log('API: ', window.api.ipcRenderer);
   useEffect(() => {
     axios
       .get(

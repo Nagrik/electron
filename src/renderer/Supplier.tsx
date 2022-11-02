@@ -46,20 +46,35 @@ const Supplier = () => {
   const [supplierData, setSupplierData] = useState<SupplierType | null>(null);
 
   // window.api.ipcRenderer()
+  // console.log('API: ', window.api.ipcRenderer);
   useEffect(() => {
-    window.api.ipcRenderer.send('ipc-example', []);
-    window.api.ipcRenderer.once('ipc-example', (arg: SupplierType) => {
-      setSupplierData(arg);
-    });
+    // window.api.ipcRenderer.send('ipc-example', []);
+    // window.api.ipcRenderer.once('ipc-example', (arg: SupplierType) => {
+    //   setSupplierData(arg);
+    // });
+    // window.api.ipcRenderer.getSupplier(id!).then((data) => {
+    //   setSupplierData(data);
+    // });
+    // window.api.ipcRenderer.getSupplier(id!).then((data) => {
+    //   setSupplierData(data);
+    // });
     // axios
     //   .get(`https://therealyo-northwind.herokuapp.com/supplier?id=${id}`)
     //   .then((res: any) => {
     //     setSupplierData(res.data);
     //   });
-    return () => {
-      window.api.ipcRenderer.removeAllListeners('ping');
-    };
-  }, []);
+    axios.get(`http://localhost:42500/getSupplier?id=${id}`).then((res) => {
+      console.log(res.data);
+      setSupplierData(res.data);
+    });
+    // window.api.ipcRenderer.getSupplier(id!).then((data) => {
+    //   console.log('Data: ', data);
+    //   setSupplierData(data);
+
+    // return () => {
+    //   window.api.ipcRenderer.removeAllListeners('getSupplier');
+    // };
+  }, [id]);
 
   return (
     <Wrapper>
