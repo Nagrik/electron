@@ -28,18 +28,10 @@ type Customer = {
 const CustomersPage = () => {
   const [customers, setCustomers] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const dispatch = useDispatch();
-  const obj = {
-    query: customers?.queries,
-    time: new Date().toISOString(),
-  };
+  const dispatch = useDispatch<any>();
 
   useEffect(() => {
-    if (customers?.queries?.length > 0) {
-      dispatch(setQuery(obj));
-    }
-  }, [customers]);
-  useEffect(() => {
+    console.log('API: ', window.api);
     axios
       .get(
         `https://therealyo-northwind.herokuapp.com/customers?page=${currentPage}`
@@ -49,7 +41,24 @@ const CustomersPage = () => {
         setCustomers(res.data);
         return res.data;
       });
+
+    // window.api.customers.getCustomerPage(currentPage).then((data) => {
+    //   console.log('pageData: ', data);
+    // });
+    // return () => {
+    //   window.api.removeAllListeners('getCustomerPage');
+    // };
   }, [currentPage]);
+
+  useEffect(() => {
+    if (customers?.queries?.length > 0) {
+      const obj = {
+        query: customers?.queries,
+        time: new Date().toISOString(),
+      };
+      dispatch(setQuery(obj));
+    }
+  }, [customers, dispatch]);
   return (
     <Wrapper>
       {customers ? (

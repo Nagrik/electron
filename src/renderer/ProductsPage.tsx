@@ -27,10 +27,7 @@ const ProductsPage = () => {
   const [products, setProducts] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const dispatch = useDispatch<any>();
-  const obj = {
-    query: products?.queries,
-    time: new Date().toISOString(),
-  };
+
   useEffect(() => {
     axios
       .get(
@@ -41,15 +38,27 @@ const ProductsPage = () => {
         setProducts(res.data);
         return res.data;
       });
+
+    // window.api.products.getProductPage(currentPage).then((data) => {
+    //   console.log('pageData: ', data);
+    // });
+    // return () => {
+    //   window.api.removeAllListeners('getProductPage');
+    // };
   }, [currentPage]);
 
   useEffect(() => {
     if (products?.queries?.length > 0) {
+      const obj = {
+        query: products?.queries,
+        time: new Date().toISOString(),
+      };
       dispatch(setQuery(obj));
     }
-  }, [products]);
+  }, [products, dispatch]);
+
   const query = useSelector(selectQuery);
-  console.log(query);
+  // console.log(query);
   return (
     <Wrapper>
       {products ? (
