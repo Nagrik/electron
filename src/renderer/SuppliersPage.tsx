@@ -32,16 +32,26 @@ const SuppliersPage = () => {
   const [suppliers, setSuppliers] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const dispatch = useDispatch<any>();
+  // console.log('API: ', window.api.ipcRenderer);
+  // console.log(window.api);
+
   useEffect(() => {
+    console.log('API SUPPLIERS: ', window.api);
     axios
       .get(
         `https://therealyo-northwind.herokuapp.com/suppliers?page=${currentPage}`
       )
       .then((res) => {
-        // console.log(res);
         setSuppliers(res.data);
         return res.data;
       });
+
+    // window.api.suppliers.getSupplierPage(currentPage).then((data) => {
+    //   console.log('pageData: ', data);
+    // });
+    // return () => {
+    //   window.api.removeAllListeners('getSupplierPage');
+    // };
   }, [currentPage]);
 
   useEffect(() => {

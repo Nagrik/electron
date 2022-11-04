@@ -34,7 +34,16 @@ const Product = () => {
       .then((res: any) => {
         setProductData(res.data);
       });
-  }, []);
+
+    // window.api.products.getProduct(id!).then((data) => {
+    //   console.log('Data: ', data);
+    //   // setSupplierData(data.data[0]);
+    // });
+
+    // return () => {
+    //   window.api.removeAllListeners('');
+    // };
+  }, [id]);
   return (
     <Wrapper>
       {productData ? (

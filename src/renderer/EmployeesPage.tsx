@@ -61,10 +61,7 @@ const EmployeesPage = () => {
   const [products, setProducts] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const dispatch = useDispatch<any>();
-  const obj = {
-    query: products?.queries,
-    time: new Date().toISOString(),
-  };
+
   useEffect(() => {
     axios
       .get(
@@ -75,13 +72,24 @@ const EmployeesPage = () => {
         setProducts(res.data);
         return res.data;
       });
+
+    // window.api.employees.getEmployeePage(currentPage).then((data) => {
+    //   console.log('pageData: ', data);
+    // });
+    // return () => {
+    //   window.api.removeAllListeners('getEmployeePage');
+    // };
   }, [currentPage]);
 
   useEffect(() => {
     if (products?.queries?.length > 0) {
+      const obj = {
+        query: products?.queries,
+        time: new Date().toISOString(),
+      };
       dispatch(setQuery(obj));
     }
-  }, [products]);
+  }, [products, dispatch]);
   const query = useSelector(selectQuery);
   console.log(query);
   return (

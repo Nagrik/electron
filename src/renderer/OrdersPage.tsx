@@ -29,10 +29,7 @@ type Order = {
 const OrdersPage = () => {
   const [orders, setOrders] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const obj = {
-    query: orders?.queries,
-    time: new Date().toISOString(),
-  };
+
   const dispatch = useDispatch<any>();
   useEffect(() => {
     axios
@@ -44,12 +41,25 @@ const OrdersPage = () => {
         setOrders(res.data);
         return res.data;
       });
+
+    // window.api.orders.getOrderPage(currentPage!).then((data) => {
+    //   console.log('pageData: ', data);
+    //   // setSupplierData(data.data[0]);
+    // });
+
+    // return () => {
+    //   window.api.removeAllListeners('getOrderPage');
+    // };
   }, [currentPage]);
   useEffect(() => {
     if (orders?.queries?.length > 0) {
+      const obj = {
+        query: orders?.queries,
+        time: new Date().toISOString(),
+      };
       dispatch(setQuery(obj));
     }
-  }, [orders]);
+  }, [orders, dispatch]);
 
   return (
     <Wrapper>

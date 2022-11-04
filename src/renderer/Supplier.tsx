@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
+// import { remote } from 'electron';
 import axios from 'axios';
+// import shared from '../main/main';
 import Ballot from './icons/Ballot';
+// import { server } from '../main/main';
+// import { instance } from '../main/main';
 
 // export type SupplierType = {
 //   queries: string[];
@@ -22,7 +26,7 @@ import Ballot from './icons/Ballot';
 //   };
 // };
 
-export type SupplierType = {
+type SupplierType = {
   SupplierID: number;
   CompanyName: string;
   ContactName: string;
@@ -45,21 +49,22 @@ const Supplier = () => {
   };
   const [supplierData, setSupplierData] = useState<SupplierType | null>(null);
 
-  // window.api.ipcRenderer()
   useEffect(() => {
-    window.api.ipcRenderer.send('ipc-example', []);
-    window.api.ipcRenderer.once('ipc-example', (arg: SupplierType) => {
-      setSupplierData(arg);
-    });
-    // axios
-    //   .get(`https://therealyo-northwind.herokuapp.com/supplier?id=${id}`)
-    //   .then((res: any) => {
-    //     setSupplierData(res.data);
-    //   });
-    return () => {
-      window.api.ipcRenderer.removeAllListeners('ping');
-    };
-  }, []);
+    axios
+      .get(`https://therealyo-northwind.herokuapp.com/supplier?id=${id}`)
+      .then((res) => {
+        // console.log(res.data);
+        setSupplierData(res.data);
+      });
+    // window.api.suppliers.getSupplier(id!).then((data) => {
+    //   console.log('Data: ', data);
+    //   // setSupplierData(data.data[0]);
+    // });
+
+    // return () => {
+    //   window.api.removeAllListeners('getSupplier');
+    // };
+  }, [id]);
 
   return (
     <Wrapper>

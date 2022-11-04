@@ -64,7 +64,16 @@ const Order = () => {
           setTotalDiscount((prev) => prev + product.Discount);
         });
       });
-  }, []);
+
+    // window.api.orders.getOrder(id!).then((data) => {
+    //   console.log('Data: ', data);
+    //   // setSupplierData(data.data[0]);
+    // });
+
+    // return () => {
+    //   window.api.removeAllListeners('getOrder');
+    // };
+  }, [id]);
 
   return (
     <Wrapper>
