@@ -65,14 +65,14 @@ const Order = () => {
         });
       });
 
-    // window.api.orders.getOrder(id!).then((data) => {
-    //   console.log('Data: ', data);
-    //   // setSupplierData(data.data[0]);
-    // });
+    window.api.orders.getOrder(id!).then((data) => {
+      console.log('Data: ', data);
+      // setSupplierData(data.data[0]);
+    });
 
-    // return () => {
-    //   window.api.removeAllListeners('getOrder');
-    // };
+    return () => {
+      window.api.removeAllListeners('getOrder');
+    };
   }, [id]);
 
   return (

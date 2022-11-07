@@ -41,14 +41,14 @@ const Employees = () => {
         setProductData(res.data);
       });
 
-    // window.api.employees.getEmployee(id!).then((data) => {
-    //   console.log('Data: ', data);
-    //   // setSupplierData(data.data[0]);
-    // });
+    window.api.employees.getEmployee(id!).then((data) => {
+      console.log('Data: ', data);
+      // setSupplierData(data.data[0]);
+    });
 
-    // return () => {
-    //   window.api.removeAllListeners('getEmployee');
-    // };
+    return () => {
+      window.api.removeAllListeners('getEmployee');
+    };
   }, [id]);
   console.log(productData);
   return (

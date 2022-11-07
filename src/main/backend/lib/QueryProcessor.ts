@@ -22,11 +22,11 @@ export class QueryProcessor<T> {
     this.query = query;
   }
 
-  private readonly isEmptyString = (str: string) => {
+  private readonly isEmptyString = (str: string): boolean => {
     return str.length === 0;
   };
 
-  readonly countMetrics = async (param?: QueryParam) => {
+  readonly countMetrics = async (param?: QueryParam): Promise<void> => {
     if (!this.isEmptyString(this.query)) {
       this.setStart();
       this.queryResult = (await shared.connection?.query(this.query, param))
@@ -36,7 +36,7 @@ export class QueryProcessor<T> {
     }
   };
 
-  readonly countSQLMetrics = () => {
+  readonly countSQLMetrics = (): void => {
     this.select = this.countOccurences(this.query, 'SELECT');
     this.selectWhere = this.countOccurences(this.query, 'WHERE');
     this.selectJoin = this.countOccurences(this.query, 'JOIN');
@@ -51,11 +51,11 @@ export class QueryProcessor<T> {
     this.endTime = [0, 0];
   };
 
-  readonly setStart = () => {
+  readonly setStart = (): void => {
     this.startTime = process.hrtime();
   };
 
-  readonly setEnd = () => {
+  readonly setEnd = (): void => {
     this.endTime = process.hrtime(this.startTime);
     this.executionTime = this.endTime[1] / 1_000_000;
     this.resetCounter();

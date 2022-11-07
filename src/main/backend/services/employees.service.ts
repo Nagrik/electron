@@ -4,10 +4,10 @@ import { Employee } from '../../../types/employee';
 export class CustomerService {
   pageSize: number = 20;
 
-  logger: QueryLogger<Employee>;
+  logger: QueryLogger<Employee, void>;
 
   constructor() {
-    this.logger = new QueryLogger<Employee>();
+    this.logger = new QueryLogger<Employee, void>();
   }
 
   getEmployeeInfo = async (id: string) => {

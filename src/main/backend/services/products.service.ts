@@ -1,14 +1,13 @@
 import { QueryLogger } from '../lib/QueryLogger';
-// import { Customer } from '../../../types/customer';
 import { Product } from '../../../types/product';
 
 export class CustomerService {
   pageSize: number = 20;
 
-  logger: QueryLogger<Product>;
+  logger: QueryLogger<Product, void>;
 
   constructor() {
-    this.logger = new QueryLogger<Product>();
+    this.logger = new QueryLogger<Product, void>();
   }
 
   getProductInfo = async (id: string) => {
