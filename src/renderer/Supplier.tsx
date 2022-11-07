@@ -56,14 +56,14 @@ const Supplier = () => {
         // console.log(res.data);
         setSupplierData(res.data);
       });
-    // window.api.suppliers.getSupplier(id!).then((data) => {
-    //   console.log('Data: ', data);
-    //   // setSupplierData(data.data[0]);
-    // });
+    window.api.suppliers.getSupplier(id!).then((data) => {
+      console.log('Data: ', data);
+      // setSupplierData(data.data[0]);
+    });
 
-    // return () => {
-    //   window.api.removeAllListeners('getSupplier');
-    // };
+    return () => {
+      window.api.removeAllListeners('getSupplier');
+    };
   }, [id]);
 
   return (

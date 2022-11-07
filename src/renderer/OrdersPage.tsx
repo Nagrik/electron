@@ -42,14 +42,14 @@ const OrdersPage = () => {
         return res.data;
       });
 
-    // window.api.orders.getOrderPage(currentPage!).then((data) => {
-    //   console.log('pageData: ', data);
-    //   // setSupplierData(data.data[0]);
-    // });
+    window.api.orders.getOrderPage(currentPage!).then((data) => {
+      console.log('pageData: ', data);
+      // setSupplierData(data.data[0]);
+    });
 
-    // return () => {
-    //   window.api.removeAllListeners('getOrderPage');
-    // };
+    return () => {
+      window.api.removeAllListeners('getOrderPage');
+    };
   }, [currentPage]);
   useEffect(() => {
     if (orders?.queries?.length > 0) {

@@ -42,12 +42,12 @@ const CustomersPage = () => {
         return res.data;
       });
 
-    // window.api.customers.getCustomerPage(currentPage).then((data) => {
-    //   console.log('pageData: ', data);
-    // });
-    // return () => {
-    //   window.api.removeAllListeners('getCustomerPage');
-    // };
+    window.api.customers.getCustomerPage(currentPage).then((data) => {
+      console.log('pageData: ', data);
+    });
+    return () => {
+      window.api.removeAllListeners('getCustomerPage');
+    };
   }, [currentPage]);
 
   useEffect(() => {

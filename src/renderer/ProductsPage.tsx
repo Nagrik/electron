@@ -39,12 +39,12 @@ const ProductsPage = () => {
         return res.data;
       });
 
-    // window.api.products.getProductPage(currentPage).then((data) => {
-    //   console.log('pageData: ', data);
-    // });
-    // return () => {
-    //   window.api.removeAllListeners('getProductPage');
-    // };
+    window.api.products.getProductPage(currentPage).then((data) => {
+      console.log('pageData: ', data);
+    });
+    return () => {
+      window.api.removeAllListeners('getProductPage');
+    };
   }, [currentPage]);
 
   useEffect(() => {

@@ -1,10 +1,3 @@
-// import { Metrics } from '../lib/QueryProcessor';
-
-// export type QueryStats = {
-//   query: string;
-//   data: any;
-//   metrics: typeof Metrics;
-// };
 export type Query = {
   select: number;
   selectWhere: number;
@@ -18,4 +11,9 @@ export type QueryParam = string[] | number[] | string[][] | number[][];
 export interface QueryResult<T> {
   query: Query;
   data: T[];
+}
+
+export interface ProcessedQueryResult<T, S> {
+  queries: Query[];
+  data: (T | S)[];
 }

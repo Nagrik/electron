@@ -20,7 +20,7 @@ export type Order = {
   TotalQuantity: number;
   TotalDiscount: number;
   TotalProducts: number;
-  // Products: Array<Product>;
+  Products?: Array<Product>;
 };
 
 export type OrderQuery = {

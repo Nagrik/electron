@@ -4,10 +4,10 @@ import { Supplier } from '../../../types/supplier';
 export class SupplierService {
   pageSize: number = 20;
 
-  logger: QueryLogger<Supplier>;
+  logger: QueryLogger<Supplier, void>;
 
   constructor() {
-    this.logger = new QueryLogger<Supplier>();
+    this.logger = new QueryLogger<Supplier, void>();
   }
 
   getSupplierInfo = async (id: string) => {

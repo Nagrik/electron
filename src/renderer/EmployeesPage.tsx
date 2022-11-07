@@ -73,12 +73,12 @@ const EmployeesPage = () => {
         return res.data;
       });
 
-    // window.api.employees.getEmployeePage(currentPage).then((data) => {
-    //   console.log('pageData: ', data);
-    // });
-    // return () => {
-    //   window.api.removeAllListeners('getEmployeePage');
-    // };
+    window.api.employees.getEmployeePage(currentPage).then((data) => {
+      console.log('pageData: ', data);
+    });
+    return () => {
+      window.api.removeAllListeners('getEmployeePage');
+    };
   }, [currentPage]);
 
   useEffect(() => {

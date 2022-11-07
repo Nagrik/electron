@@ -1,7 +1,13 @@
-import { QueryResult, QueryParam, Query } from '../../../types/query';
+import { Product } from '../../../types/product';
+import {
+  QueryResult,
+  QueryParam,
+  Query,
+  ProcessedQueryResult,
+} from '../../../types/query';
 import { QueryProcessor } from './QueryProcessor';
 
-export class QueryLogger<T> {
+export class QueryLogger<T, S> {
   queries: QueryResult<T>[] = [];
 
   processQuery = async (query: string, param?: QueryParam): Promise<void> => {
@@ -12,10 +18,10 @@ export class QueryLogger<T> {
     }
   };
 
-  retrieveQueries = () => {
+  retrieveQueries = (): ProcessedQueryResult<T, S> => {
     const temp = {
       queries: [] as Query[],
-      data: [] as T[],
+      data: [] as (T | S)[],
     };
 
     this.queries.forEach((el) => {

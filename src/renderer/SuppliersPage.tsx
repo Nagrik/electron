@@ -46,12 +46,12 @@ const SuppliersPage = () => {
         return res.data;
       });
 
-    // window.api.suppliers.getSupplierPage(currentPage).then((data) => {
-    //   console.log('pageData: ', data);
-    // });
-    // return () => {
-    //   window.api.removeAllListeners('getSupplierPage');
-    // };
+    window.api.suppliers.getSupplierPage(currentPage).then((data) => {
+      console.log('pageData: ', data);
+    });
+    return () => {
+      window.api.removeAllListeners('getSupplierPage');
+    };
   }, [currentPage]);
 
   useEffect(() => {

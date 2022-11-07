@@ -33,14 +33,14 @@ const Customer = () => {
         setCustomerData(res.data.data);
       });
 
-    // window.api.customers.getCustomer(id!).then((data) => {
-    //   console.log('Data: ', data);
-    //   // setSupplierData(data.data[0]);
-    // });
+    window.api.customers.getCustomer(id!).then((data) => {
+      console.log('Data: ', data);
+      // setSupplierData(data.data[0]);
+    });
 
-    // return () => {
-    //   window.api.removeAllListeners('getCustomer');
-    // };
+    return () => {
+      window.api.removeAllListeners('getCustomer');
+    };
   }, [id]);
   return (
     <Wrapper>

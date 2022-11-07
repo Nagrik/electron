@@ -1,14 +1,30 @@
+// import { ProcessedQueryResult } from '../../../types/query';
 import { QueryLogger } from '../lib/QueryLogger';
 import { Order } from '../../../types/order';
+import { Product } from '../../../types/product';
 
 export class CustomerService {
   pageSize: number = 20;
 
-  logger: QueryLogger<Order>;
+  logger: QueryLogger<Order, Product>;
 
   constructor() {
-    this.logger = new QueryLogger<Order>();
+    this.logger = new QueryLogger<Order, Product>();
   }
+
+  private mapOrdersLoggerData = (
+    orderDataUnmapped: (Order | Product)[]
+  ): Order[] => {
+    const order = orderDataUnmapped.at(0) as Order;
+    const products = orderDataUnmapped.slice(1) as Product[];
+
+    return [
+      {
+        ...order,
+        Products: products,
+      },
+    ];
+  };
 
   getOrderInfo = async (id: string) => {
     // get order info
@@ -67,7 +83,10 @@ export class CustomerService {
       [id]
     );
 
-    return this.logger.retrieveQueries();
+    const loggerData = this.logger.retrieveQueries();
+    loggerData.data = this.mapOrdersLoggerData(loggerData.data);
+
+    return loggerData;
   };
 
   getOrderPage = async (page: number) => {
