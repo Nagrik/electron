@@ -1,8 +1,6 @@
-import { Product } from '../../../types/product';
 import {
   QueryResult,
   QueryParam,
-  Query,
   ProcessedQueryResult,
 } from '../../../types/query';
 import { QueryProcessor } from './QueryProcessor';
@@ -19,9 +17,9 @@ export class QueryLogger<T, S> {
   };
 
   retrieveQueries = (): ProcessedQueryResult<T, S> => {
-    const temp = {
-      queries: [] as Query[],
-      data: [] as (T | S)[],
+    const temp: ProcessedQueryResult<T, S> = {
+      queries: [],
+      data: [],
     };
 
     this.queries.forEach((el) => {
