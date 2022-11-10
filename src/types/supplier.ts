@@ -1,6 +1,7 @@
 import { Query } from './query';
 
 export type Supplier = {
+  count?: number;
   SupplierID: number;
   CompanyName: string;
   ContactName: string;
@@ -22,5 +23,5 @@ export type SupplierQuery = {
 
 export type SupplierPageQuery = {
   queries: Query[];
-  data: [{ count: number }, Supplier[]];
+  data: Supplier[];
 };

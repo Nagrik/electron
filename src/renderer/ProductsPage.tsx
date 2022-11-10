@@ -9,6 +9,7 @@ import { setQuery } from '../store/actions/login';
 import { selectQuery } from '../store/selectors/auth';
 import { PaginationRow } from './OrdersPage';
 import Pagination from './Pagination';
+import { ProductPageQuery } from '../types/product';
 
 type Product = {
   CategoryID: number;
@@ -24,23 +25,14 @@ type Product = {
 };
 
 const ProductsPage = () => {
-  const [products, setProducts] = useState<any>(null);
+  const [products, setProducts] = useState<ProductPageQuery | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
-    axios
-      .get(
-        `https://therealyo-northwind.herokuapp.com/products?page=${currentPage}`
-      )
-      .then((res) => {
-        // console.log(res);
-        setProducts(res.data);
-        return res.data;
-      });
-
     window.api.products.getProductPage(currentPage).then((data) => {
       console.log('pageData: ', data);
+      setProducts(data);
     });
     return () => {
       window.api.removeAllListeners('getProductPage');
@@ -48,17 +40,15 @@ const ProductsPage = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    if (products?.queries?.length > 0) {
+    if (products && products.queries.length > 0) {
       const obj = {
-        query: products?.queries,
+        query: products.queries,
         time: new Date().toISOString(),
       };
       dispatch(setQuery(obj));
     }
   }, [products, dispatch]);
 
-  const query = useSelector(selectQuery);
-  // console.log(query);
   return (
     <Wrapper>
       {products ? (
@@ -76,31 +66,35 @@ const ProductsPage = () => {
               <Country>Orders</Country>
             </TableHeader>
             <TableBody>
-              {products?.page.map((product: Product, i: number) => (
-                <TableRow key={i}>
-                  <BodyCompany>
-                    <Link to={`/product/${product.ProductID}`}>
-                      {product.ProductName}
-                    </Link>
-                  </BodyCompany>
-                  <BodyContact>{product.QuantityPerUnit}</BodyContact>
-                  <BodyTitle>${product.UnitPrice}</BodyTitle>
-                  <BodyCity>{product.UnitsInStock}</BodyCity>
-                  <BodyCountry>{product.UnitsOnOrder}</BodyCountry>
-                </TableRow>
-              ))}
+              {products.data.map((product: Product, i: number) => {
+                if (i < 1) return;
+                return (
+                  <TableRow key={i}>
+                    <BodyCompany>
+                      <Link to={`/product/${product.ProductID}`}>
+                        {product.ProductName}
+                      </Link>
+                    </BodyCompany>
+                    <BodyContact>{product.QuantityPerUnit}</BodyContact>
+                    <BodyTitle>${product.UnitPrice}</BodyTitle>
+                    <BodyCity>{product.UnitsInStock}</BodyCity>
+                    <BodyCountry>{product.UnitsOnOrder}</BodyCountry>
+                  </TableRow>
+                );
+              })}
               <PaginationWrapper>
                 <PaginationRow>
                   <Pagination
                     className="pagination-bar"
                     currentPage={currentPage}
-                    totalCount={products.count}
+                    totalCount={products.data[0].count}
                     pageSize={20}
                     onPageChange={(page: any) => setCurrentPage(page)}
                   />
                 </PaginationRow>
                 <PageCount>
-                  Page: {currentPage} of {Math.ceil(products?.count / 20)}
+                  Page: {currentPage} of{' '}
+                  {Math.ceil(products.data[0].count! / 20)}
                 </PageCount>
               </PaginationWrapper>
             </TableBody>

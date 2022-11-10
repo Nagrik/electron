@@ -1,6 +1,7 @@
 import { Query } from './query';
 
 export type Employee = {
+  count?: number;
   Address: string;
   BirthDate: string;
   City: string;
@@ -26,5 +27,5 @@ export type EmployeeQuery = {
 
 export type EmployeePageQuery = {
   queries: Query[];
-  data: [{ count: number }, Employee[]];
+  data: Employee[];
 };
