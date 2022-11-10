@@ -2,6 +2,7 @@ import { Product } from './product';
 import { Query } from './query';
 
 export type Order = {
+  count?: number;
   CustomerID: string;
   EmployeeID: number;
   Freight: number;
@@ -30,5 +31,5 @@ export type OrderQuery = {
 
 export type OrderPageQuery = {
   queries: Query[];
-  data: [{ count: number }, Order, Product[]];
+  data: Order[];
 };

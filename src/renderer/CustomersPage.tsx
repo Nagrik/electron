@@ -10,40 +10,17 @@ import HeaderArrowIcon from './icons/HeaderArrowIcon';
 import { PaginationRow } from './OrdersPage';
 import Pagination from './Pagination';
 import { setQuery } from '../store/actions/login';
-
-type Customer = {
-  Address: string;
-  City: string;
-  CompanyName: string;
-  ContactName: string;
-  ContactTitle: string;
-  Country: string;
-  CustomerID: string;
-  Fax: string;
-  Phone: string;
-  PostalCode: string;
-  Region: string;
-};
+import { Customer, CustomerPageQuery } from '../types/customer';
 
 const CustomersPage = () => {
-  const [customers, setCustomers] = useState<any>(null);
+  const [customers, setCustomers] = useState<CustomerPageQuery | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
-    console.log('API: ', window.api);
-    axios
-      .get(
-        `https://therealyo-northwind.herokuapp.com/customers?page=${currentPage}`
-      )
-      .then((res) => {
-        // console.log(res);
-        setCustomers(res.data);
-        return res.data;
-      });
-
     window.api.customers.getCustomerPage(currentPage).then((data) => {
       console.log('pageData: ', data);
+      setCustomers(data);
     });
     return () => {
       window.api.removeAllListeners('getCustomerPage');
@@ -51,7 +28,7 @@ const CustomersPage = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    if (customers?.queries?.length > 0) {
+    if (customers && customers.queries.length > 0) {
       const obj = {
         query: customers?.queries,
         time: new Date().toISOString(),
@@ -77,11 +54,12 @@ const CustomersPage = () => {
               <Country>Country</Country>
             </TableHeader>
             <TableBody>
-              {customers?.page.map((customer: Customer) => {
+              {customers.data.map((customer: Customer, i) => {
                 const svg = createAvatar(style, {
                   seed: customer.ContactName,
                   // ... and other options
                 });
+                if (i < 1) return;
                 return (
                   <TableRow>
                     <BodyIcon>
@@ -107,13 +85,14 @@ const CustomersPage = () => {
                   <Pagination
                     className="pagination-bar"
                     currentPage={currentPage}
-                    totalCount={customers.count}
+                    totalCount={customers.data[0].count}
                     pageSize={20}
                     onPageChange={(page: any) => setCurrentPage(page)}
                   />
                 </PaginationRow>
                 <PageCount>
-                  Page: {currentPage} of {Math.ceil(customers?.count / 20)}
+                  Page: {currentPage} of{' '}
+                  {Math.ceil(customers.data[0].count! / 20)}
                 </PageCount>
               </PaginationWrapper>
             </TableBody>

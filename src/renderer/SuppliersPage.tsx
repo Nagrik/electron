@@ -11,43 +11,19 @@ import HeaderArrowIcon from './icons/HeaderArrowIcon';
 import Pagination from './Pagination';
 import { PaginationRow, PaginationWrapper } from './OrdersPage';
 import { setQuery } from '../store/actions/login';
-
-type Supplier = {
-  Address: string;
-  City: string;
-  CompanyName: string;
-  ContactName: string;
-  ContactTitle: string;
-  Country: string;
-  Fax: string;
-  HomePage: string;
-  Phone: string;
-  PostalCode: string;
-  Region: string;
-  SupplierID: null;
-  image: string;
-};
+import { Supplier, SupplierPageQuery, SupplierQuery } from '../types/supplier';
 
 const SuppliersPage = () => {
-  const [suppliers, setSuppliers] = useState<any>(null);
+  const [suppliers, setSuppliers] = useState<SupplierPageQuery | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const dispatch = useDispatch<any>();
   // console.log('API: ', window.api.ipcRenderer);
   // console.log(window.api);
 
   useEffect(() => {
-    console.log('API SUPPLIERS: ', window.api);
-    axios
-      .get(
-        `https://therealyo-northwind.herokuapp.com/suppliers?page=${currentPage}`
-      )
-      .then((res) => {
-        setSuppliers(res.data);
-        return res.data;
-      });
-
     window.api.suppliers.getSupplierPage(currentPage).then((data) => {
       console.log('pageData: ', data);
+      setSuppliers(data);
     });
     return () => {
       window.api.removeAllListeners('getSupplierPage');
@@ -55,7 +31,7 @@ const SuppliersPage = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    if (suppliers?.queries?.length > 0) {
+    if (suppliers && suppliers.queries?.length > 0) {
       const obj = {
         query: suppliers?.queries,
         time: new Date().toISOString(),
@@ -82,11 +58,12 @@ const SuppliersPage = () => {
               <Country>Country</Country>
             </TableHeader>
             <TableBody>
-              {suppliers.page.map((supplier: Supplier) => {
+              {suppliers.data.map((supplier: Supplier, index) => {
                 const svg = createAvatar(style, {
                   seed: supplier.ContactName,
                   // ... and other options
                 });
+                if (index < 1) return;
                 return (
                   <TableRow>
                     <BodyIcon>
@@ -112,13 +89,14 @@ const SuppliersPage = () => {
                   <Pagination
                     className="pagination-bar"
                     currentPage={currentPage}
-                    totalCount={suppliers.count}
+                    totalCount={suppliers.data[0].count}
                     pageSize={20}
                     onPageChange={(page: any) => setCurrentPage(page)}
                   />
                 </PaginationRow>
                 <PageCount>
-                  Page: {currentPage} of {Math.ceil(suppliers?.count / 20)}
+                  Page: {currentPage} of{' '}
+                  {Math.ceil(suppliers.data[0].count! / 20)}
                 </PageCount>
               </PaginationWrapper>
             </TableBody>
