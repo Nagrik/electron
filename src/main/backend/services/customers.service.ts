@@ -31,7 +31,7 @@ export class CustomerService {
 
   search = async (search: string) => {
     await this.logger.processQuery(
-      'SELECT * FROM customers where customers."customers_with_rankings" @@ to_tsquery($1)',
+      `SELECT * FROM customers where customers."customers_with_rankings" @@ to_tsquery($1 || '' || ':*')`,
       [search]
     );
 

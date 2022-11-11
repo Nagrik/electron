@@ -84,6 +84,11 @@ const SearchPage = () => {
         .then((res) => {
           setSearchResponseProducts(res.data);
         });
+
+      window.api.products.searchProduct(inputValue).then((data) => {
+        console.log('SEARCH PRODUCT:', data);
+      });
+
       axios
         .get(
           `https://therealyo-northwind.herokuapp.com/searchCustomer?search=${inputValue}`
@@ -91,6 +96,10 @@ const SearchPage = () => {
         .then((res) => {
           setSearchResponseCustomer(res.data);
         });
+
+      window.api.customers.searchCustomer(inputValue).then((data) => {
+        console.log('SEARCH CUSTOMER:', data);
+      });
     }
   };
   return (
