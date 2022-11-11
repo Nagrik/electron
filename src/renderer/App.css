@@ -14,7 +14,6 @@ body {
 }
 
 .container {
-  width: 560px;
   height: 2.5em;
   position: relative;
 }
@@ -43,20 +42,6 @@ label {
   transition: top 350ms ease-in, font-size 350ms ease-in;
 }
 
-.form__input:hover {
-  border: 2px solid rgba(0, 0, 0, 0.5);
-}
-
-.form__input:focus {
-  border: 2px solid #ccc;
-}
-
-input[type="text"]:focus ~ label,
-.form__input:not(:placeholder-shown).form__input:not(:focus) ~ label {
-  top: -0.5em;
-  font-size: 0.75rem;
-  padding: 0 0.125em;
-}
 
 a{
   padding: 0 !important;
