@@ -64,9 +64,19 @@ const EmployeesPage = () => {
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
-    window.api.employees.getEmployeePage(currentPage).then((data) => {
-      setProducts(data);
-    });
+    const domain = window.localStorage.getItem('domain');
+    if (window.localStorage.getItem('domain')) {
+      axios.get(`${domain}/employees?page=${currentPage}`).then((res) => {
+        // console.log(res);
+        setProducts(res.data);
+        return res.data;
+      });
+    } else {
+      window.api.employees.getEmployeePage(currentPage).then((data) => {
+        setProducts(data);
+      });
+    }
+
     return () => {
       window.api.removeAllListeners('getEmployeePage');
     };

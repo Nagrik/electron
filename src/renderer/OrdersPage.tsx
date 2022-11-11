@@ -16,11 +16,20 @@ const OrdersPage = () => {
 
   const dispatch = useDispatch<any>();
   useEffect(() => {
-    window.api.orders.getOrderPage(currentPage!).then((data) => {
-      console.log('pageData: ', data);
-      setOrders(data);
-      // setSupplierData(data.data[0]);
-    });
+    const domain = window.localStorage.getItem('domain');
+    if (window.localStorage.getItem('domain')) {
+      axios.get(`${domain}/orders?page=${currentPage}`).then((res) => {
+        // console.log(res);
+        setOrders(res.data);
+        return res.data;
+      });
+    } else {
+      window.api.orders.getOrderPage(currentPage!).then((data) => {
+        console.log('pageData: ', data);
+        setOrders(data);
+        // setSupplierData(data.data[0]);
+      });
+    }
 
     return () => {
       window.api.removeAllListeners('getOrderPage');

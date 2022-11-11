@@ -18,13 +18,22 @@ const CustomersPage = () => {
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
-    window.api.customers.getCustomerPage(currentPage).then((data) => {
-      console.log('pageData: ', data);
-      setCustomers(data);
-    });
-    return () => {
-      window.api.removeAllListeners('getCustomerPage');
-    };
+    const domain = window.localStorage.getItem('domain');
+    if (window.localStorage.getItem('domain')) {
+      axios.get(`${domain}/customers?page=${currentPage}`).then((res) => {
+        // console.log(res);
+        setCustomers(res.data);
+        return res.data;
+      });
+    } else {
+      window.api.customers.getCustomerPage(currentPage).then((data) => {
+        console.log('pageData: ', data);
+        setCustomers(data);
+      });
+      return () => {
+        window.api.removeAllListeners('getCustomerPage');
+      };
+    }
   }, [currentPage]);
 
   useEffect(() => {

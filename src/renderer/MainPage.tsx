@@ -123,6 +123,7 @@ const MainPage = () => {
                   change={domainSaved}
                   onClick={() => {
                     setDomainSaved(false);
+                    window.localStorage.removeItem('domain');
                   }}
                 >
                   <span>Change</span>
@@ -141,58 +142,40 @@ const MainPage = () => {
               )}
             </InputWrapper>
             <InputWrapper>
-              <IconWrapper
-                ref={refDB}
-                onClick={() => setIsDBActive(!isDBActive)}
-              >
-                <InfoIcon />
-                {isDBActive && (
-                  <InfoBlockWrapper>
-                    By saving this field you will make requests from your DB by
-                    link.
-                    <br /> You can read detailed documentation{' '}
-                    <a href="">here</a>
-                  </InfoBlockWrapper>
-                )}
-              </IconWrapper>
-              <div className="container">
-                <InputWrapperr
-                  ref={secondInputRef}
-                  active={secondInputActive}
-                  onClick={() => setSecondInputActive(true)}
-                >
-                  <Input
-                    placeholder="Link to your DB"
-                    onChange={(e) => changeInputDBValue(e)}
-                  />
-                </InputWrapperr>
-              </div>
-              <SaveButtonDB
-                disabled={inputDBValue === ''}
-                active={saveDB && inputDBValue !== ''}
-                onClick={() => setSaveDB(!saveDB)}
-              >
-                {saveDB && inputDBValue !== '' ? 'Saved' : 'Save'}
-              </SaveButtonDB>
+              {/* <IconWrapper */}
+              {/*   ref={refDB} */}
+              {/*   onClick={() => setIsDBActive(!isDBActive)} */}
+              {/* > */}
+              {/*   <InfoIcon /> */}
+              {/*   {isDBActive && ( */}
+              {/*     <InfoBlockWrapper> */}
+              {/*       By saving this field you will make requests from your DB by */}
+              {/*       link. */}
+              {/*       <br /> You can read detailed documentation{' '} */}
+              {/*       <a href="">here</a> */}
+              {/*     </InfoBlockWrapper> */}
+              {/*   )} */}
+              {/* </IconWrapper> */}
+              {/* <div className="container"> */}
+              {/*   <InputWrapperr */}
+              {/*     ref={secondInputRef} */}
+              {/*     active={secondInputActive} */}
+              {/*     onClick={() => setSecondInputActive(true)} */}
+              {/*   > */}
+              {/*     <Input */}
+              {/*       placeholder="Link to your DB" */}
+              {/*       onChange={(e) => changeInputDBValue(e)} */}
+              {/*     /> */}
+              {/*   </InputWrapperr> */}
+              {/* </div> */}
+              {/* <SaveButtonDB */}
+              {/*   disabled={inputDBValue === ''} */}
+              {/*   active={saveDB && inputDBValue !== ''} */}
+              {/*   onClick={() => setSaveDB(!saveDB)} */}
+              {/* > */}
+              {/*   {saveDB && inputDBValue !== '' ? 'Saved' : 'Save'} */}
+              {/* </SaveButtonDB> */}
             </InputWrapper>
-
-            {/* <Instruction> */}
-            {/*   <InstructionTitle> */}
-            {/*     How to get link to your database: */}
-            {/*   </InstructionTitle> */}
-            {/*   <ParagraphWrapper> */}
-            {/*     <InstructionParagraph> */}
-            {/*       1. Create a new database in D1. */}
-            {/*     </InstructionParagraph> */}
-            {/*     <InstructionParagraph> */}
-            {/*       2. Create a new worker in Cloudflare Workers. */}
-            {/*     </InstructionParagraph> */}
-            {/*     <InstructionParagraph> */}
-            {/*       3. Copy the worker code from <a href="">here</a> and paste it */}
-            {/*       into your worker. */}
-            {/*     </InstructionParagraph> */}
-            {/*   </ParagraphWrapper> */}
-            {/* </Instruction> */}
           </InstructionWrapper>
         </ChooseDBContentWrapper>
       </ChooseDBWrapper>
