@@ -5,7 +5,7 @@ import useOnClickOutside from './hooks/useOnClickOutside';
 
 const MainPage = () => {
   const [saveDB, setSaveDB] = useState(false);
-  const [saveDomain, setSaveDomain] = useState(false);
+  const [domainSaved, setDomainSaved] = useState(false);
   const [isDomainActive, setIsDomainActive] = useState<boolean>(false);
   const [isDBActive, setIsDBActive] = useState<boolean>(false);
   const [inputDomainValue, setInputDomainValue] = useState<string>('');
@@ -19,37 +19,23 @@ const MainPage = () => {
   });
 
   const changeInputDomainValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputDomainValue(e.target.value);
-    if (e.target.value === '') {
-      setSaveDomain(false);
+    if (!domainSaved) {
+      setInputDomainValue(e.target.value);
     }
   };
 
   const changeInputDBValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputDBValue(e.target.value);
-    if (e.target.value === '') {
-      setSaveDB(false);
-    }
   };
 
-  // const chooseDB = (id: number) => {
-  //   const newDatabases = databases.map((db) => {
-  //     if (db.id === id) {
-  //       return {
-  //         ...db,
-  //         checked: !db.checked,
-  //       };
-  //     }
-  //     return db;
-  //   });
-  //   setDatabasesList(newDatabases);
-  //   setCurrentDB(id);
-  // };
+  const saveDomain = () => {
+    setDomainSaved(true);
+  };
+
   const [firstInputActive, setFirstInputActive] = useState<boolean>(false);
   const [secondInputActive, setSecondInputActive] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {};
   const firstInputRef = useOnClickOutside(() => {
     setFirstInputActive(false);
   });
@@ -125,18 +111,34 @@ const MainPage = () => {
                 >
                   <Input
                     placeholder="Link to your Domain"
-                    onChange={(e) => handleInput(e)}
-                    onKeyPress={(e) => handleInput(e)}
+                    onChange={(e) => changeInputDomainValue(e)}
+                    value={inputDomainValue}
                   />
                 </InputWrapperr>
               </div>
-              <SaveButtonDomain
-                disabled={inputDomainValue === ''}
-                active={saveDomain && inputDomainValue !== ''}
-                onClick={() => setSaveDomain(!saveDomain)}
-              >
-                {saveDomain && inputDomainValue !== '' ? 'Saved' : 'Save'}
-              </SaveButtonDomain>
+              {domainSaved ? (
+                <SaveButtonDomain
+                  disabled={inputDomainValue === ''}
+                  active={inputDomainValue !== ''}
+                  change={domainSaved}
+                  onClick={() => {
+                    setDomainSaved(false);
+                  }}
+                >
+                  <span>Change</span>
+                </SaveButtonDomain>
+              ) : (
+                <SaveButtonDomain
+                  disabled={inputDomainValue === ''}
+                  active={inputDomainValue !== ''}
+                  onClick={() => {
+                    inputDomainValue !== '' && setDomainSaved(true);
+                    window.localStorage.setItem('domain', inputDomainValue);
+                  }}
+                >
+                  <span>Save</span>
+                </SaveButtonDomain>
+              )}
             </InputWrapper>
             <InputWrapper>
               <IconWrapper
@@ -161,8 +163,7 @@ const MainPage = () => {
                 >
                   <Input
                     placeholder="Link to your DB"
-                    onChange={(e) => handleInput(e)}
-                    onKeyPress={(e) => handleInput(e)}
+                    onChange={(e) => changeInputDBValue(e)}
                   />
                 </InputWrapperr>
               </div>
@@ -262,10 +263,12 @@ const SaveButtonDB = styled.button<{ active: boolean }>`
   background-color: ${({ active }) => (active ? '#37b737' : '#fff')};
   color: ${({ active }) => (active ? '#fff' : '#000')};
 `;
-const SaveButtonDomain = styled.button<{ active: boolean }>`
+const SaveButtonDomain = styled.button<{ active: boolean; change?: boolean }>`
   margin-top: 4px;
   margin-left: 15px;
-  background-color: ${({ active }) => (active ? '#37b737' : '#fff')};
+  background-color: ${({ active, change }) =>
+    // eslint-disable-next-line no-nested-ternary
+    active && !change ? '#37b737' : change ? '#bf3945' : '#fff'};
   color: ${({ active }) => (active ? '#fff' : '#000')};
 `;
 
