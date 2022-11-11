@@ -16,11 +16,13 @@ declare global {
       customers: {
         getCustomer(id: string): Promise<CustomerQuery>;
         getCustomerPage(page: number): Promise<CustomerPageQuery>;
+        searchCustomer(search: string): Promise<CustomerQuery>;
       };
 
       products: {
         getProduct(id: string): Promise<ProductQuery>;
         getProductPage(page: number): Promise<ProductPageQuery>;
+        searchProduct(search: string): Promise<ProductQuery>;
       };
 
       employees: {

@@ -7,18 +7,18 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.removeAllListeners(channel);
   },
 
-  setUrl(url: string) {
-    ipcRenderer.send('setUrl', url);
-  },
+  // setUrl(url: string) {
+  //   ipcRenderer.send('setUrl', url);
+  // },
 
-  getUrl() {
-    ipcRenderer.send('getUrl');
-    return new Promise((resolve) => {
-      ipcRenderer.once('getUrl', (event, url: string) => {
-        resolve(url);
-      });
-    });
-  },
+  // getUrl() {
+  //   ipcRenderer.send('getUrl');
+  //   return new Promise((resolve) => {
+  //     ipcRenderer.once('getUrl', (event, url: string) => {
+  //       resolve(url);
+  //     });
+  //   });
+  // },
 
   suppliers: {
     getSupplier(id: string) {
@@ -30,6 +30,7 @@ contextBridge.exposeInMainWorld('api', {
         });
       });
     },
+
     getSupplierPage(page: number) {
       ipcRenderer.send('getSupplierPage', page);
 
@@ -51,6 +52,7 @@ contextBridge.exposeInMainWorld('api', {
         });
       });
     },
+
     getCustomerPage(page: number) {
       ipcRenderer.send('getCustomerPage', page);
 
@@ -60,6 +62,7 @@ contextBridge.exposeInMainWorld('api', {
         });
       });
     },
+
     searchCustomer(search: string) {
       ipcRenderer.send('searchCustomer', search);
 
@@ -81,6 +84,7 @@ contextBridge.exposeInMainWorld('api', {
         });
       });
     },
+
     getProductPage(page: number) {
       ipcRenderer.send('getProductPage', page);
 
@@ -90,6 +94,7 @@ contextBridge.exposeInMainWorld('api', {
         });
       });
     },
+
     searchProduct(search: string) {
       ipcRenderer.send('searchProduct', search);
 
@@ -111,6 +116,7 @@ contextBridge.exposeInMainWorld('api', {
         });
       });
     },
+
     getEmployeePage(page: number) {
       ipcRenderer.send('getEmployeePage', page);
 
@@ -132,6 +138,7 @@ contextBridge.exposeInMainWorld('api', {
         });
       });
     },
+
     getOrderPage(page: number) {
       ipcRenderer.send('getOrderPage', page);
 
