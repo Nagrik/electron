@@ -21,13 +21,21 @@ const SuppliersPage = () => {
   // console.log(window.api);
 
   useEffect(() => {
-    window.api.suppliers.getSupplierPage(currentPage).then((data) => {
-      console.log('pageData: ', data);
-      setSuppliers(data);
-    });
-    return () => {
-      window.api.removeAllListeners('getSupplierPage');
-    };
+    const domain = window.localStorage.getItem('domain');
+    if (window.localStorage.getItem('domain')) {
+      axios.get(`${domain}/suppliers?page=${currentPage}`).then((res) => {
+        setSuppliers(res.data);
+        return res.data;
+      });
+    } else {
+      window.api.suppliers.getSupplierPage(currentPage).then((data) => {
+        console.log('pageData: ', data);
+        setSuppliers(data);
+      });
+      return () => {
+        window.api.removeAllListeners('getSupplierPage');
+      };
+    }
   }, [currentPage]);
 
   useEffect(() => {

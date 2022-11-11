@@ -24,15 +24,30 @@ const SearchPage = () => {
   const dispatch = useDispatch<any>();
 
   const handleInput = (e: any) => {
+    const domain = window.localStorage.getItem('domain');
     setInputValue(e.target.value);
     if (e.key === 'Enter') {
-      window.api.products.searchProduct(inputValue).then((data) => {
-        setSearchResponseProducts(data);
-      });
+      if (window.localStorage.getItem('domain')) {
+        axios
+          .get(`${domain}/searchProduct?search=${inputValue}`)
+          .then((res) => {
+            setSearchResponseProducts(res.data);
+          });
 
-      window.api.customers.searchCustomer(inputValue).then((data) => {
-        setSearchResponseCustomer(data);
-      });
+        axios
+          .get(`${domain}/searchCustomer?search=${inputValue}`)
+          .then((res) => {
+            setSearchResponseCustomer(res.data);
+          });
+      } else {
+        window.api.products.searchProduct(inputValue).then((data) => {
+          setSearchResponseProducts(data);
+        });
+
+        window.api.customers.searchCustomer(inputValue).then((data) => {
+          setSearchResponseCustomer(data);
+        });
+      }
     }
   };
 
