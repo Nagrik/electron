@@ -1,6 +1,7 @@
 import { Query } from './query';
 
 export type Customer = {
+  count?: number;
   Address: string;
   City: string;
   CompanyName: string;
@@ -21,5 +22,5 @@ export type CustomerQuery = {
 
 export type CustomerPageQuery = {
   queries: Query[];
-  data: [{ count: number }, Customer[]];
+  data: Customer[];
 };

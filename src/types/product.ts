@@ -1,6 +1,7 @@
 import { Query } from './query';
 
 export type Product = {
+  count?: number;
   CategoryID: number;
   Discontinued: number;
   ProductID: number;
@@ -21,5 +22,5 @@ export type ProductQuery = {
 
 export type ProductPageQuery = {
   queries: Query[];
-  data: [{ count: number }, Product[]];
+  data: Product[];
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { selectQuery } from '../store/selectors/auth';
@@ -6,7 +6,21 @@ import { DashObjType } from '../store/reducers/auth';
 
 const DashboardPage = () => {
   const query = useSelector(selectQuery);
-  console.log(query);
+  const [countSelect, setCountSelect] = useState<number>(0);
+  const [countSelectWhere, setCountSelectWhere] = useState<number>(0);
+  const [countSelectLeft, setCountSelectLeft] = useState<number>(0);
+  useEffect(() => {
+    if (query) {
+      query.map((item: DashObjType) => {
+        item.query.map((queryArr: any) => {
+          setCountSelect((prev) => prev + queryArr.select);
+          setCountSelectWhere((prev) => prev + queryArr.selectWhere);
+          setCountSelectLeft((prev) => prev + queryArr.selectJoin);
+        });
+      });
+    }
+  }, [query]);
+
   return (
     <Wrapper>
       <TopContentWrapper>
@@ -18,10 +32,10 @@ const DashboardPage = () => {
         <TopContentRight>
           <Title>SQL Metrics</Title>
           <SubTitle>Query count: {query?.length}</SubTitle>
-          <SubTitle>Results count: 42</SubTitle>
-          <SubTitle># SELECT: 4</SubTitle>
-          <SubTitle># SELECT WHERE: 0</SubTitle>
-          <SubTitle># SELECT LEFT JOIN: 0</SubTitle>
+          <SubTitle>Results count: {query && query.length * 2}</SubTitle>
+          <SubTitle># SELECT: {countSelect}</SubTitle>
+          <SubTitle># SELECT WHERE: {countSelectWhere}</SubTitle>
+          <SubTitle># SELECT LEFT JOIN: {countSelectLeft}</SubTitle>
         </TopContentRight>
       </TopContentWrapper>
       <MainContent>
@@ -32,9 +46,14 @@ const DashboardPage = () => {
         <MainContentLogs>
           {query?.map((item: DashObjType) =>
             item.query?.map((itemQuery: any) => {
+              console.log(itemQuery);
               return (
                 <Log>
-                  <LogsInfo>{item.time}</LogsInfo>
+                  <div style={{ display: 'flex' }}>
+                    <LogsInfo>{item.time}</LogsInfo>
+                    <LogsInfo>,&nbsp;SQL&nbsp;,</LogsInfo>
+                    <LogsInfo>{itemQuery.executionTime}ms</LogsInfo>
+                  </div>
                   <LogString>{itemQuery.query}</LogString>
                 </Log>
               );

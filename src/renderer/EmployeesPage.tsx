@@ -12,6 +12,7 @@ import { setQuery } from '../store/actions/login';
 import { selectQuery } from '../store/selectors/auth';
 import { PaginationRow } from './OrdersPage';
 import Pagination from './Pagination';
+import { Employee, EmployeePageQuery } from '../types/employee';
 
 type Page = {
   EmployeeID: number;
@@ -58,23 +59,13 @@ type Product = {
 };
 
 const EmployeesPage = () => {
-  const [products, setProducts] = useState<any>(null);
+  const [products, setProducts] = useState<EmployeePageQuery | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
-    axios
-      .get(
-        `https://therealyo-northwind.herokuapp.com/employees?page=${currentPage}`
-      )
-      .then((res) => {
-        // console.log(res);
-        setProducts(res.data);
-        return res.data;
-      });
-
     window.api.employees.getEmployeePage(currentPage).then((data) => {
-      console.log('pageData: ', data);
+      setProducts(data);
     });
     return () => {
       window.api.removeAllListeners('getEmployeePage');
@@ -82,7 +73,7 @@ const EmployeesPage = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    if (products?.queries?.length > 0) {
+    if (products && products.queries.length > 0) {
       const obj = {
         query: products?.queries,
         time: new Date().toISOString(),
@@ -110,10 +101,11 @@ const EmployeesPage = () => {
               <Country>Country</Country>
             </TableHeader>
             <TableBody>
-              {products?.page.map((product: Page, i: number) => {
+              {products.data.map((product: Employee, i: number) => {
                 const svg = createAvatar(style, {
-                  seed: product.FirstName + product.LastName,
+                  seed: product.FirstName,
                 });
+                if (i < 1) return;
                 return (
                   <TableRow key={i}>
                     <BodyIcon>
@@ -138,13 +130,14 @@ const EmployeesPage = () => {
                   <Pagination
                     className="pagination-bar"
                     currentPage={currentPage}
-                    totalCount={products.count}
+                    totalCount={products.data[0].count}
                     pageSize={20}
                     onPageChange={(page: any) => setCurrentPage(page)}
                   />
                 </PaginationRow>
                 <PageCount>
-                  Page: {currentPage} of {Math.ceil(products?.count / 20)}
+                  Page: {currentPage} of{' '}
+                  {Math.ceil(products.data[0].count! / 20)}
                 </PageCount>
               </PaginationWrapper>
             </TableBody>
