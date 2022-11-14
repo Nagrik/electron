@@ -170,47 +170,328 @@ UPDATE products SET products_ranking = to_tsvector("ProductName");
 
 You can use your own API if has following endpoints:
 
-```HTTP
-GET http://your.own.api/suppliers?page=1 HTTP/1.1
-```
+**queries** field is present on every response
 
 ```JSON
-Response {
-  queries: Array{
+queries: Array[{
       executionTime: number,
       select: number,
       selectWhere: number,
       selectJoin: number,
       query: string // SQL query executed to get response data
-    },
-  data: {
+    }],
+```
 
-  }
+```HTTP
+GET http://your.own.api/suppliers?page=1 HTTP/1.1
+
+Response {
+  queries,
+  data: Array[
+    { count: number },
+    ...{
+      SupplierID: number;
+      CompanyName: string;
+      ContactName: string;
+      ContactTitle: string;
+      Address: string;
+      City: string;
+      Region: string;
+      PostalCode: string;
+      Country: string;
+      Phone: string;
+      Fax: string;
+      HomePage: string;
+    }
+  ]
 }
 ```
 
+```HTTP
 GET http://your.own.api/supplier?id=1 HTTP/1.1
 
+Response {
+  queries,
+  data: [{
+    SupplierID: number;
+    CompanyName: string;
+    ContactName: string;
+    ContactTitle: string;
+    Address: string;
+    City: string;
+    Region: string;
+    PostalCode: string;
+    Country: string;
+    Phone: string;
+    Fax: string;
+    HomePage: string;
+  }]
+}
+
+```
+
+```HTTP
 GET http://your.own.api/customers?page=1 HTTP/1.1
 
+Response {
+  queries,
+  data: Array[
+    { count: number },
+    ...{
+      Address: string;
+      City: string;
+      CompanyName: string;
+      ContactName: string;
+      ContactTitle: string;
+      Country: string;
+      CustomerID: string;
+      Fax: string;
+      Phone: string;
+      PostalCode: string;
+      Region: string;
+    }
+  ]
+}
+```
+
+```HTTP
 GET http://your.own.api/customer?id=ALFKI HTTP/1.1
 
+Response {
+  queries,
+  data: [{
+    Address: string;
+    City: string;
+    CompanyName: string;
+    ContactName: string;
+    ContactTitle: string;
+    Country: string;
+    CustomerID: string;
+    Fax: string;
+    Phone: string;
+    PostalCode: string;
+    Region: string;
+  }]
+}
+```
+
+```HTTP
 GET http://your.own.api/searchCustomer?search=Alfred HTTP/1.1
 
+Response {
+  queries,
+  data: Array[...{
+    Address: string;
+    City: string;
+    CompanyName: string;
+    ContactName: string;
+    ContactTitle: string;
+    Country: string;
+    CustomerID: string;
+    Fax: string;
+    Phone: string;
+    PostalCode: string;
+    Region: string;
+  }]
+}
+```
+
+```HTTP
 GET http://your.own.api/products?page=1 HTTP/1.1
 
+Response {
+  queries,
+  data: Array[
+    { count: number },
+    ...{
+      CategoryID: number;
+      Discontinued: number;
+      ProductID: number;
+      ProductName: string;
+      QuantityPerUnit: string;
+      ReorderLevel: number;
+      Supplier: string;
+      SupplierID: number;
+      UnitPrice: number;
+      UnitsInStock: number;
+      UnitsOnOrder: number;
+    }
+  ]
+}
+```
+
+```HTTP
 GET http://your.own.api/product?id=1 HTTP/1.1
 
+Response {
+  queries,
+  data: [{
+    CategoryID: number;
+    Discontinued: number;
+    ProductID: number;
+    ProductName: string;
+    QuantityPerUnit: string;
+    ReorderLevel: number;
+    Supplier: string;
+    SupplierID: number;
+    UnitPrice: number;
+    UnitsInStock: number;
+    UnitsOnOrder: number;
+  }]
+}
+```
+
+```HTTP
 GET http://your.own.api/searchProduct?search=Chai HTTP/1.1
 
+Response {
+  queries,
+  data: Array[...{
+    CategoryID: number;
+    Discontinued: number;
+    ProductID: number;
+    ProductName: string;
+    QuantityPerUnit: string;
+    ReorderLevel: number;
+    Supplier: string;
+    SupplierID: number;
+    UnitPrice: number;
+    UnitsInStock: number;
+    UnitsOnOrder: number;
+  }]
+}
+```
+
+```HTTP
 GET http://your.own.api/employees?page=1 HTTP/1.1
 
+Response {
+  queries,
+  data: Array[
+    { count: number },
+    ...{
+      Address: string;
+      BirthDate: string;
+      City: string;
+      Country: string;
+      EmployeeID: number;
+      Extension: number;
+      FirstName: string;
+      HireDate: string;
+      HomePhone: string;
+      LastName: string;
+      Notes: string;
+      PostalCode: string;
+      Region: string;
+      ReportsTo: number;
+      ReportsToName: string;
+      Title: string;
+      TitleOfCourtesy: string;
+    }
+  ]
+}
+```
+
+```HTTP
 GET http://your.own.api/employee?id=1 HTTP/1.1
 
+Response {
+  queries,
+  data: [{
+      Address: string;
+      BirthDate: string;
+      City: string;
+      Country: string;
+      EmployeeID: number;
+      Extension: number;
+      FirstName: string;
+      HireDate: string;
+      HomePhone: string;
+      LastName: string;
+      Notes: string;
+      PostalCode: string;
+      Region: string;
+      ReportsTo: number;
+      ReportsToName: string;
+      Title: string;
+      TitleOfCourtesy: string;
+  }]
+}
+```
+
+```HTTP
 GET http://your.own.api/orders?page=1 HTTP/1.1
 
+Response {
+  queries,
+  data: Array[{
+    { count: number},
+    ...{
+      CustomerID: string;
+      EmployeeID: number;
+      Freight: number;
+      OrderDate: string;
+      OrderID: number;
+      RequiredDate: string;
+      ShipAddress: string;
+      ShipCity: string;
+      ShipCountry: string;
+      ShipName: string;
+      ShipPostalCode: string;
+      ShipRegion: string;
+      ShipVia: string;
+      ShippedDate: string;
+      TotalPrice: number;
+      TotalQuantity: number;
+      TotalDiscount: number;
+      TotalProducts: number;
+    }
+  }]
+}
+```
+
+```HTTP
 GET http://your.own.api/order?id=10248 HTTP/1.1
 
+Response {
+  queries,
+  data: [{
+    CustomerID: string;
+    EmployeeID: number;
+    Freight: number;
+    OrderDate: string;
+    OrderID: number;
+    RequiredDate: string;
+    ShipAddress: string;
+    ShipCity: string;
+    ShipCountry: string;
+    ShipName: string;
+    ShipPostalCode: string;
+    ShipRegion: string;
+    ShipVia: string;
+    ShippedDate: string;
+    TotalPrice: number;
+    TotalQuantity: number;
+    TotalDiscount: number;
+    TotalProducts: number;
+    Products: Array[...{
+      CategoryID: number;
+      Discontinued: number;
+      Discount: string;
+      OrderID: number;
+      OrderUnitPrice: string;
+      ProductID: number;
+      ProductName: string;
+      ProductUnitPrice: string;
+      Quantity: number;
+      QuantityPerUnit: string;
+      ReorderLevel: number;
+      SupplierID: number;
+      UnitsInStock: number;
+      UnitsOnOrder: number;
+    }];
+  }]
+}
 ```
 
 <!-- See our [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation) -->
@@ -218,4 +499,3 @@ GET http://your.own.api/order?id=10248 HTTP/1.1
 ## License
 
 MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
-```
