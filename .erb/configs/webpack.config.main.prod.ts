@@ -47,6 +47,7 @@ const configuration: webpack.Configuration = {
     new BundleAnalyzerPlugin({
       analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
     }),
+    new webpack.IgnorePlugin({ resourceRegExp: /^pg-native$/ }),
 
     /**
      * Create global constants which can be configured at compile time.
