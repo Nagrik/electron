@@ -28,7 +28,7 @@ export class CustomerService {
         employees."HomePhone", \
         employees."Extension", \
         employees."Notes", \
-        employees."ReportsTo" \
+        employees."ReportsTo", \
         CONCAT(reports."LastName", ' ', reports."FirstName") as "ReportsToName" \
       FROM employees \
         LEFT JOIN employees AS reports \

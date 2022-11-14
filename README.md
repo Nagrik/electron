@@ -172,19 +172,22 @@ You can use your own API if has following endpoints:
 
 ```HTTP
 GET http://your.own.api/suppliers?page=1 HTTP/1.1
+```
 
+```JSON
 Response {
   queries: Array{
-    executionTime: number,
-    select: number,
-    selectWhere: number,
-    selectJoin: number,
-
-  },
+      executionTime: number,
+      select: number,
+      selectWhere: number,
+      selectJoin: number,
+      query: string // SQL query executed to get response data
+    },
   data: {
 
   }
 }
+```
 
 GET http://your.own.api/supplier?id=1 HTTP/1.1
 
@@ -208,7 +211,6 @@ GET http://your.own.api/orders?page=1 HTTP/1.1
 
 GET http://your.own.api/order?id=10248 HTTP/1.1
 
-
 ```
 
 <!-- See our [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation) -->
@@ -216,3 +218,4 @@ GET http://your.own.api/order?id=10248 HTTP/1.1
 ## License
 
 MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
+```
