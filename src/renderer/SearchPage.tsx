@@ -27,7 +27,7 @@ const SearchPage = () => {
     const domain = window.localStorage.getItem('domain');
     setInputValue(e.target.value);
     if (e.key === 'Enter') {
-      if (window.localStorage.getItem('domain')) {
+      if (domain) {
         axios
           .get(`${domain}/searchProduct?search=${inputValue}`)
           .then((res) => {

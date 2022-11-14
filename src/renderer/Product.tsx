@@ -6,19 +6,21 @@ import Ballot from './icons/Ballot';
 
 type Supplier = {
   queries: string[];
-  data: {
-    CategoryID: number;
-    Discontinued: number;
-    ProductID: number;
-    ProductName: string;
-    QuantityPerUnit: string;
-    ReorderLevel: number;
-    Supplier: string;
-    SupplierID: number;
-    UnitPrice: number;
-    UnitsInStock: number;
-    UnitsOnOrder: number;
-  };
+  data: SupplierData;
+};
+
+type SupplierData = {
+  CategoryID: number;
+  Discontinued: number;
+  ProductID: number;
+  ProductName: string;
+  QuantityPerUnit: string;
+  ReorderLevel: number;
+  Supplier: string;
+  SupplierID: number;
+  UnitPrice: number;
+  UnitsInStock: number;
+  UnitsOnOrder: number;
 };
 
 const Product = () => {
@@ -27,18 +29,20 @@ const Product = () => {
   const goBack = () => {
     navigation('/products');
   };
-  const [productData, setProductData] = useState<Supplier | null>(null);
-  useEffect(() => {
-    axios
-      .get(`https://therealyo-northwind.herokuapp.com/product?id=${id}`)
-      .then((res: any) => {
-        setProductData(res.data);
-      });
+  const [productData, setProductData] = useState<SupplierData | null>(null);
+  const domain = window.localStorage.getItem('domain');
 
-    window.api.products.getProduct(id!).then((data) => {
-      console.log('Data: ', data);
-      // setSupplierData(data.data[0]);
-    });
+  useEffect(() => {
+    if (domain) {
+      axios.get(`${domain}/product?id=${id}`).then((res: any) => {
+        setProductData(res.data.data);
+      });
+    } else {
+      window.api.products.getProduct(id!).then((data) => {
+        console.log('Data: ', data);
+        setProductData(data.data[0]);
+      });
+    }
 
     return () => {
       window.api.removeAllListeners('');
@@ -60,13 +64,13 @@ const Product = () => {
                     Product Name
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.ProductName}
+                    {productData.ProductName}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Supplier</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.Supplier}
+                    {productData.Supplier}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -74,7 +78,7 @@ const Product = () => {
                     Quantity Per Unit
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.QuantityPerUnit}
+                    {productData.QuantityPerUnit}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -82,7 +86,7 @@ const Product = () => {
                     Unit Price
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.UnitPrice}
+                    {productData.UnitPrice}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentLeft>
@@ -92,7 +96,7 @@ const Product = () => {
                     Units In Stock
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.UnitsInStock}
+                    {productData.UnitsInStock}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -100,7 +104,7 @@ const Product = () => {
                     Units In Order
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.UnitsOnOrder}
+                    {productData.UnitsOnOrder}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -108,7 +112,7 @@ const Product = () => {
                     Reorder Level
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.ReorderLevel}
+                    {productData.ReorderLevel}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -116,7 +120,7 @@ const Product = () => {
                     Discontinued
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.Discontinued}
+                    {productData.Discontinued}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentRight>

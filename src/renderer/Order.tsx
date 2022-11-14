@@ -4,43 +4,21 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { format } from 'date-fns';
 import Ballot from './icons/Ballot';
-
-type OrderType = {
-  queries: string[];
-  data: {
-    CustomerID: string;
-    EmployeeID: number;
-    Freight: number;
-    OrderDate: string;
-    OrderID: number;
-    Products: Array<Product>;
-    RequiredDate: string;
-    ShipAddress: string;
-    ShipCity: string;
-    ShipCountry: string;
-    ShipName: string;
-    ShipPostalCode: string;
-    ShipRegion: string;
-    ShipVia: string;
-    ShippedDate: string;
-    TotalPrice: number;
-  };
-};
+import { OrderType } from '../types/order';
 
 type Product = {
   CategoryID: number;
   Discontinued: number;
-  Discount: number;
+  Discount: string;
   OrderID: number;
-  OrderPrice: number;
+  OrderUnitPrice: string;
   ProductID: number;
   ProductName: string;
+  ProductUnitPrice: string;
   Quantity: number;
   QuantityPerUnit: string;
   ReorderLevel: number;
   SupplierID: number;
-  TotalPrice: number;
-  UnitPrice: number;
   UnitsInStock: number;
   UnitsOnOrder: number;
 };
@@ -54,26 +32,27 @@ const Order = () => {
   const [orderData, setOrderData] = useState<OrderType | null>(null);
   const [totalQuantity, setTotalQuantity] = useState<number>(0);
   const [totalDiscount, setTotalDiscount] = useState<number>(0);
+
+  const domain = window.localStorage.getItem('domain');
   useEffect(() => {
-    axios
-      .get(`https://therealyo-northwind.herokuapp.com/order?id=${id}`)
-      .then((res: any) => {
-        setOrderData(res.data);
+    if (domain) {
+      axios.get(`${domain}/order?id=${id}`).then((res: any) => {
+        setOrderData(res.data.data);
         res.data.data.Products.forEach((product: Product) => {
           setTotalQuantity((prev) => prev + product.Quantity);
-          setTotalDiscount((prev) => prev + product.Discount);
+          setTotalDiscount((prev) => prev + Number(product.Discount));
         });
       });
-
-    window.api.orders.getOrder(id!).then((data) => {
-      console.log('Data: ', data);
-      // setSupplierData(data.data[0]);
-    });
-
+    } else {
+      window.api.orders.getOrder(id!).then((data) => {
+        console.log('Data: ', data.data[0]);
+        setOrderData(data.data[0]);
+      });
+    }
     return () => {
       window.api.removeAllListeners('getOrder');
     };
-  }, [id]);
+  }, [domain, id]);
 
   return (
     <Wrapper>
@@ -91,15 +70,15 @@ const Order = () => {
                     Customer ID
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    <Link to={`/customer/${orderData?.data.CustomerID}`}>
-                      {orderData?.data.CustomerID}
+                    <Link to={`/customer/${orderData.CustomerID}`}>
+                      {orderData.CustomerID}
                     </Link>
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Ship Name</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {orderData?.data.ShipName}
+                    {orderData.ShipName}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -107,7 +86,7 @@ const Order = () => {
                     Total Products
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {orderData?.data.Products.length}
+                    {orderData.Products && orderData.Products.length}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -123,7 +102,7 @@ const Order = () => {
                     Total Price
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    ${orderData?.data.TotalPrice}
+                    ${orderData.TotalPrice}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -137,13 +116,13 @@ const Order = () => {
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Ship Via</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {orderData?.data.ShipVia}
+                    {orderData.ShipVia}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Freight</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    ${orderData?.data.Freight}
+                    ${orderData.Freight}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentLeft>
@@ -154,7 +133,7 @@ const Order = () => {
                     Order Date
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {format(new Date(orderData.data.OrderDate), 'yyyy-LL-dd')}
+                    {format(new Date(orderData.OrderDate), 'yyyy-LL-dd')}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -162,10 +141,7 @@ const Order = () => {
                     Required Date
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {format(
-                      new Date(orderData.data.RequiredDate),
-                      'yyyy-LL-dd'
-                    )}
+                    {format(new Date(orderData.RequiredDate), 'yyyy-LL-dd')}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -173,13 +149,13 @@ const Order = () => {
                     Shipped Date
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {format(new Date(orderData.data.ShippedDate), 'yyyy-LL-dd')}
+                    {format(new Date(orderData.ShippedDate), 'yyyy-LL-dd')}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Ship City</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {orderData?.data.ShipCity}
+                    {orderData.ShipCity}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -187,7 +163,7 @@ const Order = () => {
                     Ship Region
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {orderData?.data.ShipRegion}
+                    {orderData.ShipRegion}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -195,7 +171,7 @@ const Order = () => {
                     Ship Postal Code
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {orderData?.data.ShipPostalCode}
+                    {orderData.ShipPostalCode}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -203,7 +179,7 @@ const Order = () => {
                     Ship Country
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {orderData?.data.ShipCountry}
+                    {orderData.ShipCountry}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentRight>
@@ -220,19 +196,24 @@ const Order = () => {
                 <TableHeaderRowItem5>Discount</TableHeaderRowItem5>
               </TableHeaderRow>
               <TableBody>
-                {orderData?.data.Products.map((product: Product) => (
-                  <TableBodyRow>
-                    <TableBodyRowItem1>
-                      <Link to={`/product/${product.ProductID}`}>
-                        {product.ProductName}
-                      </Link>
-                    </TableBodyRowItem1>
-                    <TableBodyRowItem2>{product.Quantity}</TableBodyRowItem2>
-                    <TableBodyRowItem3>${product.OrderPrice}</TableBodyRowItem3>
-                    <TableBodyRowItem4>${product.TotalPrice}</TableBodyRowItem4>
-                    <TableBodyRowItem5>{product.Discount}%</TableBodyRowItem5>
-                  </TableBodyRow>
-                ))}
+                {orderData.Products &&
+                  orderData.Products.map((product: Product) => (
+                    <TableBodyRow>
+                      <TableBodyRowItem1>
+                        <Link to={`/product/${product.ProductID}`}>
+                          {product.ProductName}
+                        </Link>
+                      </TableBodyRowItem1>
+                      <TableBodyRowItem2>{product.Quantity}</TableBodyRowItem2>
+                      <TableBodyRowItem3>
+                        ${product.OrderUnitPrice}
+                      </TableBodyRowItem3>
+                      <TableBodyRowItem4>
+                        ${product.Quantity * Number(product.OrderUnitPrice)}
+                      </TableBodyRowItem4>
+                      <TableBodyRowItem5>{product.Discount}%</TableBodyRowItem5>
+                    </TableBodyRow>
+                  ))}
               </TableBody>
             </Table>
           </TableWrapper>

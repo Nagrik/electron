@@ -1,7 +1,7 @@
 import { Product } from './product';
 import { Query } from './query';
 
-export type Order = {
+export type OrderType = {
   count?: number;
   CustomerID: string;
   EmployeeID: number;
@@ -21,15 +21,32 @@ export type Order = {
   TotalQuantity: number;
   TotalDiscount: number;
   TotalProducts: number;
-  Products?: Array<Product>;
+  Products?: Array<OrderProduct>;
 };
 
 export type OrderQuery = {
   queries: Query[];
-  data: Order[];
+  data: OrderType[];
 };
 
 export type OrderPageQuery = {
   queries: Query[];
-  data: Order[];
+  data: OrderType[];
+};
+
+export type OrderProduct = {
+  CategoryID: number;
+  Discontinued: number;
+  Discount: string;
+  OrderID: number;
+  OrderUnitPrice: string;
+  ProductID: number;
+  ProductName: string;
+  ProductUnitPrice: string;
+  Quantity: number;
+  QuantityPerUnit: string;
+  ReorderLevel: number;
+  SupplierID: number;
+  UnitsInStock: number;
+  UnitsOnOrder: number;
 };
