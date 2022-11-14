@@ -1,36 +1,16 @@
-<img src=".erb/img/erb-banner.svg" width="100%" />
+## The Repository
 
-<br>
-
-<p>
-  Electron React Boilerplate uses <a href="https://electron.atom.io/">Electron</a>, <a href="https://facebook.github.io/react/">React</a>, <a href="https://github.com/reactjs/react-router">React Router</a>, <a href="https://webpack.js.org/">Webpack</a> and <a href="https://www.npmjs.com/package/react-refresh">React Fast Refresh</a>.
-</p>
-
-<br>
-
-<div align="center">
-
-[![Build Status][github-actions-status]][github-actions-url]
-[![Github Tag][github-tag-image]][github-tag-url]
-[![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/Fjy3vfgy5q)
-
-[![OpenCollective](https://opencollective.com/electron-react-boilerplate-594/backers/badge.svg)](#backers)
-[![OpenCollective](https://opencollective.com/electron-react-boilerplate-594/sponsors/badge.svg)](#sponsors)
-[![StackOverflow][stackoverflow-img]][stackoverflow-url]
-
-</div>
+This repository stores a desktop copy of [Northwind Traders](https://northwind.d1sql.com/dash) made using electron, react, typescript.
 
 ## Install
 
 Clone the repo and install dependencies:
 
 ```bash
-git clone --depth 1 --branch main https://github.com/electron-react-boilerplate/electron-react-boilerplate.git your-project-name
+git clone --depth 1 --branch main https://github.com/Nagrik/electron.git your-project-name
 cd your-project-name
 npm install
 ```
-
-**Having issues installing? See our [debugging guide](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/400)**
 
 ## Starting Development
 
@@ -40,120 +20,199 @@ Start the app in the `dev` environment:
 npm start
 ```
 
-## Packaging for Production
+<!-- ## Packaging for Production
 
 To package apps for the local platform:
 
 ```bash
 npm run package
-```
+``` -->
 
 ## Docs
 
-See our [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation)
+You can use existing backend for this application with existing database or provide your own database either adding link to it in **.env** or setting link in dashboard page of the application.
 
-## Community
+#### Own database
 
-Join our Discord: https://discord.gg/Fjy3vfgy5q
+You can use database with our backend **only if** your database is _PostgreSQL_ and have following tables
 
-## Sponsors
+```sql
+CREATE TABLE IF NOT EXISTS Categories (
+	"CategoryID" INT PRIMARY KEY,
+	"CategoryName" character varying(100),
+	"Description" character varying(100)
+);
 
-<a href="https://palette.dev">
-  <img src=".erb/img/palette-sponsor-banner.svg" width="100%" />
-</a>
+CREATE TABLE IF NOT EXISTS Customers (
+	"CustomerID" character varying(20) PRIMARY KEY,
+	"CompanyName" character varying(100),
+	"ContactName" character varying(100),
+	"ContactTitle" character varying(100),
+	"Address" character varying(100),
+	"City" character varying(100),
+	"Region" character varying(100),
+	"PostalCode" character varying(100),
+	"Country" character varying(100),
+	"Phone" character varying(100),
+	"Fax" character varying(100)
+);
 
-## Donations
+CREATE TABLE IF NOT EXISTS EmployeeTerritories (
+	"EmployeeID" INT,
+	"TerritoryID" INT
+);
 
-**Donations will ensure the following:**
+CREATE TABLE IF NOT EXISTS Employees (
+	"EmployeeID" INT PRIMARY KEY,
+	"LastName" character varying(100),
+	"FirstName" character varying(100),
+	"Title" character varying(100),
+	"TitleOfCourtesy" character varying(100),
+	"BirthDate" character varying(100),
+	"HireDate" character varying(100),
+	"Address" character varying(100),
+	"City" character varying(100),
+	"Region" character varying(100),
+	"PostalCode" character varying(100),
+	"Country" character varying(100),
+	"HomePhone" character varying(100),
+	"Extension" INT,
+	"Notes" character varying(500),
+	"ReportsTo" INT
+);
 
-- 🔨 Long term maintenance of the project
-- 🛣 Progress on the [roadmap](https://electron-react-boilerplate.js.org/docs/roadmap)
-- 🐛 Quick responses to bug reports and help requests
+CREATE TABLE IF NOT EXISTS OrderDetails (
+	"id" SERIAL PRIMARY KEY,
+	"OrderID" INT,
+	"ProductID" INT,
+	"UnitPrice" numeric,
+	"Quantity" INT,
+	"Discount" numeric
+);
 
-## Backers
+CREATE TABLE IF NOT EXISTS Orders (
+	"OrderID" INT PRIMARY KEY,
+	"CustomerID" character varying(5),
+	"EmployeeID" INT,
+	"OrderDate" character varying(100),
+	"RequiredDate" character varying(100),
+	"ShippedDate" character varying(100),
+	"ShipVia" INT,
+	"Freight" numeric,
+	"ShipName" character varying(100),
+	"ShipAddress" character varying(100),
+	"ShipCity" character varying(100),
+	"ShipRegion" character varying(100),
+	"ShipPostalCode" character varying(100),
+	"ShipCountry" character varying(100)
+);
 
-Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/electron-react-boilerplate-594#backer)]
+CREATE TABLE IF NOT EXISTS Products (
+	"ProductID" INT PRIMARY KEY,
+	"ProductName" character varying(100),
+	"SupplierID" INT,
+	"CategoryID" INT,
+	"QuantityPerUnit" character varying(100),
+	"UnitPrice" numeric,
+	"UnitsInStock" INT,
+	"UnitsOnOrder" INT,
+	"ReorderLevel" INT,
+	"Discontinued" INT
+);
 
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/0/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/0/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/1/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/1/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/2/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/2/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/3/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/3/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/4/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/4/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/5/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/5/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/6/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/6/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/7/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/7/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/8/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/8/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/9/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/9/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/10/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/10/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/11/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/11/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/12/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/12/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/13/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/13/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/14/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/14/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/15/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/15/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/16/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/16/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/17/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/17/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/18/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/18/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/19/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/19/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/20/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/20/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/21/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/21/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/22/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/22/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/23/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/23/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/24/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/24/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/25/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/25/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/26/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/26/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/27/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/27/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/28/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/28/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/29/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/29/avatar.svg"></a>
+CREATE TABLE IF NOT EXISTS Regions (
+	"RegionID" INT PRIMARY KEY,
+	"RegionDescription" character varying(30)
+);
 
-## Sponsors
+CREATE TABLE IF NOT EXISTS Shippers (
+	"ShipperID" INT PRIMARY KEY,
+	"CompanyName" character varying(100),
+	"Phone" character varying(50)
+);
 
-Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/electron-react-boilerplate-594-594#sponsor)]
+CREATE TABLE IF NOT EXISTS Suppliers (
+	"SupplierID" INT PRIMARY KEY,
+	"CompanyName" character varying(100),
+	"ContactName" character varying(100),
+	"ContactTitle" character varying(100),
+	"Address" character varying(100),
+	"City" character varying(100),
+	"Region" character varying(100),
+	"PostalCode" character varying(100),
+	"Country" character varying(100),
+	"Phone" character varying(100),
+	"Fax" character varying(100),
+	"HomePage" character varying(100)
+);
 
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/0/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/1/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/2/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/3/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/4/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/5/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/6/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/7/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/8/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/9/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/9/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/10/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/10/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/11/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/11/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/12/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/12/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/13/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/13/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/14/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/14/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/15/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/15/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/16/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/16/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/17/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/17/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/18/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/18/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/19/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/19/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/20/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/20/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/21/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/21/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/22/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/22/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/23/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/23/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/24/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/24/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/25/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/25/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/26/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/26/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/27/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/27/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/28/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/28/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/29/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/29/avatar.svg"></a>
+CREATE TABLE IF NOT EXISTS Territories (
+	"TerritoryID" character varying(10) PRIMARY KEY,
+	"TerritoryDescription" character varying(50),
+	"RegionID" INT
+);
 
-## Maintainers
+ALTER TABLE customers
+    ADD COLUMN customers_with_rankings tsvector;
+UPDATE customers SET customers_with_rankings =
+    setweight(to_tsvector("CustomerID"), 'AA') ||
+    setweight(to_tsvector("CompanyName"), 'AB') ||
+    setweight(to_tsvector("ContactName"), 'AC') ||
+    setweight(to_tsvector("ContactTitle"), 'AD') ||
+    setweight(to_tsvector("Address"), 'BA');
 
-- [Amila Welihinda](https://github.com/amilajack)
-- [John Tran](https://github.com/jooohhn)
-- [C. T. Lin](https://github.com/chentsulin)
-- [Jhen-Jie Hong](https://github.com/jhen0409)
+ALTER TABLE products
+    ADD COLUMN products_ranking tsvector;
+UPDATE products SET products_ranking = to_tsvector("ProductName");
+```
+
+#### Own API
+
+You can use your own API if has following endpoints:
+
+```HTTP
+GET http://your.own.api/suppliers?page=1 HTTP/1.1
+
+Response {
+  queries: Array{
+    executionTime: number,
+    select: number,
+    selectWhere: number,
+    selectJoin: number,
+
+  },
+  data: {
+
+  }
+}
+
+GET http://your.own.api/supplier?id=1 HTTP/1.1
+
+GET http://your.own.api/customers?page=1 HTTP/1.1
+
+GET http://your.own.api/customer?id=ALFKI HTTP/1.1
+
+GET http://your.own.api/searchCustomer?search=Alfred HTTP/1.1
+
+GET http://your.own.api/products?page=1 HTTP/1.1
+
+GET http://your.own.api/product?id=1 HTTP/1.1
+
+GET http://your.own.api/searchProduct?search=Chai HTTP/1.1
+
+GET http://your.own.api/employees?page=1 HTTP/1.1
+
+GET http://your.own.api/employee?id=1 HTTP/1.1
+
+GET http://your.own.api/orders?page=1 HTTP/1.1
+
+GET http://your.own.api/order?id=10248 HTTP/1.1
+
+
+```
+
+<!-- See our [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation) -->
 
 ## License
 
 MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
-
-[github-actions-status]: https://github.com/electron-react-boilerplate/electron-react-boilerplate/workflows/Test/badge.svg
-[github-actions-url]: https://github.com/electron-react-boilerplate/electron-react-boilerplate/actions
-[github-tag-image]: https://img.shields.io/github/tag/electron-react-boilerplate/electron-react-boilerplate.svg?label=version
-[github-tag-url]: https://github.com/electron-react-boilerplate/electron-react-boilerplate/releases/latest
-[stackoverflow-img]: https://img.shields.io/badge/stackoverflow-electron_react_boilerplate-blue.svg
-[stackoverflow-url]: https://stackoverflow.com/questions/tagged/electron-react-boilerplate
