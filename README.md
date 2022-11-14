@@ -172,7 +172,7 @@ You can use your own API if has following endpoints:
 
 **queries** field is present on every response
 
-```JSON
+```TEXT
 queries: Array[{
       executionTime: number,
       select: number,
@@ -182,7 +182,7 @@ queries: Array[{
     }],
 ```
 
-```HTTP
+```TEXT
 GET http://your.own.api/suppliers?page=1 HTTP/1.1
 
 Response {
@@ -207,7 +207,7 @@ Response {
 }
 ```
 
-```HTTP
+```TEXT
 GET http://your.own.api/supplier?id=1 HTTP/1.1
 
 Response {
@@ -230,7 +230,7 @@ Response {
 
 ```
 
-```HTTP
+```TEXT
 GET http://your.own.api/customers?page=1 HTTP/1.1
 
 Response {
@@ -254,7 +254,7 @@ Response {
 }
 ```
 
-```HTTP
+```TEXT
 GET http://your.own.api/customer?id=ALFKI HTTP/1.1
 
 Response {
@@ -275,7 +275,7 @@ Response {
 }
 ```
 
-```HTTP
+```TEXT
 GET http://your.own.api/searchCustomer?search=Alfred HTTP/1.1
 
 Response {
@@ -296,7 +296,7 @@ Response {
 }
 ```
 
-```HTTP
+```TEXT
 GET http://your.own.api/products?page=1 HTTP/1.1
 
 Response {
@@ -320,7 +320,7 @@ Response {
 }
 ```
 
-```HTTP
+```TEXT
 GET http://your.own.api/product?id=1 HTTP/1.1
 
 Response {
@@ -341,7 +341,7 @@ Response {
 }
 ```
 
-```HTTP
+```TEXT
 GET http://your.own.api/searchProduct?search=Chai HTTP/1.1
 
 Response {
@@ -362,7 +362,7 @@ Response {
 }
 ```
 
-```HTTP
+```TEXT
 GET http://your.own.api/employees?page=1 HTTP/1.1
 
 Response {
@@ -392,7 +392,7 @@ Response {
 }
 ```
 
-```HTTP
+```TEXT
 GET http://your.own.api/employee?id=1 HTTP/1.1
 
 Response {
@@ -419,7 +419,7 @@ Response {
 }
 ```
 
-```HTTP
+```TEXT
 GET http://your.own.api/orders?page=1 HTTP/1.1
 
 Response {
@@ -450,7 +450,7 @@ Response {
 }
 ```
 
-```HTTP
+```TEXT
 GET http://your.own.api/order?id=10248 HTTP/1.1
 
 Response {
