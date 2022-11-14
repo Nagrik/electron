@@ -48,6 +48,7 @@ const configuration: webpack.Configuration = {
       path: path.join(dist, '[name].json'),
       name: '[name]',
     }),
+    new webpack.IgnorePlugin({ resourceRegExp: /^pg-native$/ }),
 
     /**
      * Create global constants which can be configured at compile time.
