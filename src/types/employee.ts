@@ -15,7 +15,8 @@ export type Employee = {
   Notes: string;
   PostalCode: string;
   Region: string;
-  ReportsTo: string;
+  ReportsTo: number;
+  ReportsToName: string;
   Title: string;
   TitleOfCourtesy: string;
 };

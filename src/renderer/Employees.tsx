@@ -128,7 +128,7 @@ const Employees = () => {
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
                     <Link to={`/employee/${employeesData.ReportsTo}`}>
-                      {employeesData.ReportsTo}
+                      {employeesData.ReportsToName}
                     </Link>
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
@@ -140,7 +140,7 @@ const Employees = () => {
           </Footer>
         </>
       ) : (
-        <div style={{ color: '#000' }}>Loading product...</div>
+        <div style={{ color: '#000' }}>Loading employees...</div>
       )}
     </Wrapper>
   );

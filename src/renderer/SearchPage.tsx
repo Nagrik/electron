@@ -17,6 +17,7 @@ const SearchPage = () => {
   const [searchResponseCustomer, setSearchResponseCustomer] =
     useState<CustomerQuery | null>(null);
   const [isProductsActive, setIsProductsActive] = useState<boolean>(false);
+  const [enterPressed, setEnterPressed] = useState<boolean>(false);
   const inputRef = useOnClickOutside(() => {
     setInputActive(false);
   });
@@ -27,6 +28,7 @@ const SearchPage = () => {
     const domain = window.localStorage.getItem('domain');
     setInputValue(e.target.value);
     if (e.key === 'Enter') {
+      setEnterPressed(true);
       if (domain) {
         axios
           .get(`${domain}/searchProduct?search=${inputValue}`)
@@ -136,7 +138,7 @@ const SearchPage = () => {
               <SearchResult>
                 <SearchResultMainTitle>
                   <SearchResultMainSubtitle>
-                    No results
+                    {enterPressed && 'No results'}
                   </SearchResultMainSubtitle>
                 </SearchResultMainTitle>
               </SearchResult>
@@ -162,7 +164,7 @@ const SearchPage = () => {
               <SearchResult>
                 <SearchResultMainTitle>
                   <SearchResultMainSubtitle>
-                    No results
+                    {enterPressed && 'No results'}
                   </SearchResultMainSubtitle>
                 </SearchResultMainTitle>
               </SearchResult>
