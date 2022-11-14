@@ -48,23 +48,24 @@ const Supplier = () => {
     navigation('/suppliers');
   };
   const [supplierData, setSupplierData] = useState<SupplierType | null>(null);
-
+  const domain = window.localStorage.getItem('domain');
   useEffect(() => {
-    axios
-      .get(`https://therealyo-northwind.herokuapp.com/supplier?id=${id}`)
-      .then((res) => {
+    if (domain) {
+      axios.get(`${domain}/supplier?id=${id}`).then((res) => {
         // console.log(res.data);
-        setSupplierData(res.data);
+        setSupplierData(res.data.data);
       });
-    window.api.suppliers.getSupplier(id!).then((data) => {
-      console.log('Data: ', data);
-      // setSupplierData(data.data[0]);
-    });
+    } else {
+      window.api.suppliers.getSupplier(id!).then((data) => {
+        console.log('Data: ', data);
+        setSupplierData(data.data[0]);
+      });
+    }
 
     return () => {
       window.api.removeAllListeners('getSupplier');
     };
-  }, [id]);
+  }, [domain, id]);
 
   return (
     <Wrapper>
