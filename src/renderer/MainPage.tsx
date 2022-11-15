@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import InfoIcon from './icons/InfoIcon';
 import useOnClickOutside from './hooks/useOnClickOutside';
 
@@ -10,6 +11,8 @@ const MainPage = () => {
   const [isDBActive, setIsDBActive] = useState<boolean>(false);
   const [inputDomainValue, setInputDomainValue] = useState<string>('');
   const [inputDBValue, setInputDBValue] = useState<string>('');
+  const [domain, setDomain] = useState<any>();
+  const navigation = useNavigate();
   const refDomain = useOnClickOutside(() => {
     setIsDomainActive(false);
   });
@@ -42,6 +45,11 @@ const MainPage = () => {
   const secondInputRef = useOnClickOutside(() => {
     setSecondInputActive(false);
   });
+
+  useEffect(() => {
+    setDomain(window.localStorage.getItem('domain'));
+  }, [window.localStorage]);
+
   return (
     <>
       <Wrapper>
@@ -99,7 +107,9 @@ const MainPage = () => {
                     By saving this field you will make requests from your domain
                     address.
                     <br /> You can read detailed documentation{' '}
-                    <a href="">here</a>
+                    <Link onClick={() => navigation('/documentation')}>
+                      here
+                    </Link>
                   </InfoBlockWrapper>
                 )}
               </IconWrapper>
@@ -112,15 +122,15 @@ const MainPage = () => {
                   <Input
                     placeholder="Link to your Domain"
                     onChange={(e) => changeInputDomainValue(e)}
-                    value={inputDomainValue}
+                    value={domain || inputDomainValue}
                   />
                 </InputWrapperr>
               </div>
-              {domainSaved ? (
+              {domainSaved || domain !== null ? (
                 <SaveButtonDomain
-                  disabled={inputDomainValue === ''}
-                  active={inputDomainValue !== ''}
-                  change={domainSaved}
+                  disabled={inputDomainValue === '' && domain === null}
+                  active={inputDomainValue !== '' || domain !== null}
+                  change={domainSaved || domain !== null}
                   onClick={() => {
                     setDomainSaved(false);
                     window.localStorage.removeItem('domain');
@@ -184,6 +194,11 @@ const MainPage = () => {
 };
 
 export default MainPage;
+
+const Link = styled.span`
+  color: #2f80ed;
+  cursor: pointer;
+`;
 
 const Icon = styled.div`
   padding: 0 5px;
