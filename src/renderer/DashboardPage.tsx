@@ -46,7 +46,6 @@ const DashboardPage = () => {
         <MainContentLogs>
           {query?.map((item: DashObjType) =>
             item.query?.map((itemQuery: any) => {
-              console.log(itemQuery);
               return (
                 <Log>
                   <div style={{ display: 'flex' }}>
