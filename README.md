@@ -2,6 +2,8 @@
 
 This repository stores a desktop copy of [Northwind Traders](https://northwind.d1sql.com/dash) made using electron, react, typescript.
 
+It uses this [template](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
+
 ## Install
 
 Clone the repo and install dependencies:
@@ -19,14 +21,6 @@ Start the app in the `dev` environment:
 ```bash
 npm start
 ```
-
-<!-- ## Packaging for Production
-
-To package apps for the local platform:
-
-```bash
-npm run package
-``` -->
 
 ## Docs
 
@@ -493,8 +487,6 @@ Response {
   }]
 }
 ```
-
-<!-- See our [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation) -->
 
 ## License
 
