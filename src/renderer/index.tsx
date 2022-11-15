@@ -12,8 +12,7 @@ root.render(
 );
 
 // calling IPC exposed from preload script
-window.electron.ipcRenderer.once('ipc-example', (arg) => {
-  // eslint-disable-next-line no-console
-  console.log(arg);
-});
-window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']);
+// window.api.ipcRenderer.once('ipc-example', (arg) => {
+//   console.log(arg);
+// });
+// window.api.ipcRenderer.send('ipc-example', ['ping']);

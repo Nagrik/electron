@@ -3,29 +3,7 @@ import styled from 'styled-components';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Ballot from './icons/Ballot';
-
-type Supplier = {
-  queries: string[];
-  data: {
-    Address: string;
-    BirthDate: string;
-    City: string;
-    Country: string;
-    EmployeeID: number;
-    Extension: number;
-    FirstName: string;
-    HireDate: string;
-    HomePhone: string;
-    LastName: string;
-    Notes: string;
-    PostalCode: string;
-    Region: string;
-    ReportsTo: string;
-    Title: string;
-    TitleOfCourtesy: string;
-    ReportsToFullName: string;
-  };
-};
+import { Employee } from '../types/employee';
 
 const Employees = () => {
   const navigation = useNavigate();
@@ -33,18 +11,27 @@ const Employees = () => {
   const goBack = () => {
     navigation('/employees');
   };
-  const [productData, setProductData] = useState<Supplier | null>(null);
+  const [employeesData, setEmployeesData] = useState<Employee | null>(null);
+  const domain = window.localStorage.getItem('domain');
   useEffect(() => {
-    axios
-      .get(`https://therealyo-northwind.herokuapp.com/employee?id=${id}`)
-      .then((res: any) => {
-        setProductData(res.data);
+    if (domain) {
+      axios.get(`${domain}/employee?id=${id}`).then((res: any) => {
+        setEmployeesData(res.data.data);
       });
-  }, [id]);
-  console.log(productData);
+    } else {
+      window.api.employees.getEmployee(id!).then((data) => {
+        console.log('Data: ', data);
+        setEmployeesData(data.data[0]);
+      });
+    }
+
+    return () => {
+      window.api.removeAllListeners('getEmployee');
+    };
+  }, [domain, id]);
   return (
     <Wrapper>
-      {productData ? (
+      {employeesData ? (
         <>
           <Body>
             <Header>
@@ -56,13 +43,13 @@ const Employees = () => {
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Name</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.FirstName} {productData?.data.LastName}
+                    {employeesData.FirstName} {employeesData.LastName}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Title</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.Title}
+                    {employeesData.Title}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -70,7 +57,7 @@ const Employees = () => {
                     Title Of Courtesy
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.TitleOfCourtesy}
+                    {employeesData.TitleOfCourtesy}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -78,25 +65,25 @@ const Employees = () => {
                     Birth Date
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.BirthDate}
+                    {employeesData.BirthDate}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Hire Date</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.HireDate}
+                    {employeesData.HireDate}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Address</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.Address}
+                    {employeesData.Address}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>City</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.City}
+                    {employeesData.City}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentLeft>
@@ -106,13 +93,13 @@ const Employees = () => {
                     Postal Code
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.PostalCode}
+                    {employeesData.PostalCode}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Country</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.Country}
+                    {employeesData.Country}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -120,19 +107,19 @@ const Employees = () => {
                     Home Phone
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.HomePhone}
+                    {employeesData.HomePhone}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Extension</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.Extension}
+                    {employeesData.Extension}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Notes</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {productData?.data.Notes}
+                    {employeesData.Notes}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -140,8 +127,8 @@ const Employees = () => {
                     Reports To
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    <Link to={`/employee/${productData.data.ReportsTo}`}>
-                      {productData?.data.ReportsToFullName}
+                    <Link to={`/employee/${employeesData.ReportsTo}`}>
+                      {employeesData.ReportsToName}
                     </Link>
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
@@ -153,7 +140,7 @@ const Employees = () => {
           </Footer>
         </>
       ) : (
-        <div style={{ color: '#000' }}>Loading product...</div>
+        <div style={{ color: '#000' }}>Loading employees...</div>
       )}
     </Wrapper>
   );

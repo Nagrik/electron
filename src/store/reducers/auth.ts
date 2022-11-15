@@ -30,6 +30,10 @@ export class LoginReducer extends ImmerReducer<LoginState> {
       this.draftState.queryResponseDashboard = [queryResponseDashboard];
     }
   }
+
+  clearQuery(queryResponse: any) {
+    this.draftState.queryResponseDashboard = null;
+  }
 }
 
 export default createReducerFunction(LoginReducer, initialState);

@@ -2,97 +2,76 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import SearchIcon from './icons/SearchIcon';
 import useOnClickOutside from './hooks/useOnClickOutside';
-
-type SearchResponseProducts = {
-  queries: [
-    {
-      query: string;
-      metrics: {
-        select: number;
-        selectWhere: number;
-        selectJoin: number;
-        executionTime: number;
-      };
-    }
-  ];
-  data: [
-    {
-      ProductID: number;
-      ProductName: string;
-      SupplierID: number;
-      CategoryID: number;
-      QuantityPerUnit: string;
-      UnitPrice: string;
-      UnitsInStock: number;
-      UnitsOnOrder: number;
-      ReorderLevel: number;
-      Discontinued: number;
-    }
-  ];
-};
-
-type SearchResponseCustomer = {
-  queries: [
-    {
-      query: string;
-      metrics: {
-        select: number;
-        selectWhere: number;
-        selectJoin: number;
-        executionTime: number;
-      };
-    }
-  ];
-  data: [
-    {
-      CustomerID: string;
-      CompanyName: string;
-      ContactName: string;
-      ContactTitle: string;
-      Address: string;
-      City: string;
-      Region: string;
-      PostalCode: string;
-      Country: string;
-      Phone: string;
-      Fax: string;
-    }
-  ];
-};
+import { ProductQuery } from '../types/product';
+import { CustomerQuery } from '../types/customer';
+import { setQuery } from '../store/actions/login';
 
 const SearchPage = () => {
   const [inputActive, setInputActive] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [searchResponseProducts, setSearchResponseProducts] =
-    useState<SearchResponseProducts | null>(null);
+    useState<ProductQuery | null>(null);
   const [searchResponseCustomer, setSearchResponseCustomer] =
-    useState<SearchResponseCustomer | null>(null);
+    useState<CustomerQuery | null>(null);
   const [isProductsActive, setIsProductsActive] = useState<boolean>(false);
+  const [enterPressed, setEnterPressed] = useState<boolean>(false);
   const inputRef = useOnClickOutside(() => {
     setInputActive(false);
   });
 
+  const dispatch = useDispatch<any>();
+
   const handleInput = (e: any) => {
+    const domain = window.localStorage.getItem('domain');
     setInputValue(e.target.value);
     if (e.key === 'Enter') {
-      axios
-        .get(
-          `https://therealyo-northwind.herokuapp.com/searchProduct?search=${inputValue}`
-        )
-        .then((res) => {
-          setSearchResponseProducts(res.data);
+      setEnterPressed(true);
+      if (domain) {
+        axios
+          .get(`${domain}/searchProduct?search=${inputValue}`)
+          .then((res) => {
+            setSearchResponseProducts(res.data);
+          });
+
+        axios
+          .get(`${domain}/searchCustomer?search=${inputValue}`)
+          .then((res) => {
+            setSearchResponseCustomer(res.data);
+          });
+      } else {
+        window.api.products.searchProduct(inputValue).then((data) => {
+          setSearchResponseProducts(data);
         });
-      axios
-        .get(
-          `https://therealyo-northwind.herokuapp.com/searchCustomer?search=${inputValue}`
-        )
-        .then((res) => {
-          setSearchResponseCustomer(res.data);
+
+        window.api.customers.searchCustomer(inputValue).then((data) => {
+          setSearchResponseCustomer(data);
         });
+      }
     }
   };
+
+  useEffect(() => {
+    if (searchResponseProducts && searchResponseProducts.queries.length > 0) {
+      const obj = {
+        query: searchResponseProducts.queries,
+        time: new Date().toISOString(),
+      };
+      dispatch(setQuery(obj));
+    }
+  }, [searchResponseProducts, dispatch]);
+
+  useEffect(() => {
+    if (searchResponseCustomer && searchResponseCustomer.queries.length > 0) {
+      const obj = {
+        query: searchResponseCustomer.queries,
+        time: new Date().toISOString(),
+      };
+      dispatch(setQuery(obj));
+    }
+  }, [searchResponseCustomer, dispatch]);
   return (
     <Wrapper>
       <Content>
@@ -140,7 +119,7 @@ const SearchPage = () => {
         </SearchResultTitle>
         {!isProductsActive &&
         searchResponseCustomer &&
-        searchResponseCustomer.data.length > 1
+        searchResponseCustomer.data.length > 0
           ? searchResponseCustomer.data.map((product) => (
               <SearchResult>
                 <SearchResultMainTitle>
@@ -159,14 +138,14 @@ const SearchPage = () => {
               <SearchResult>
                 <SearchResultMainTitle>
                   <SearchResultMainSubtitle>
-                    No results
+                    {enterPressed && 'No results'}
                   </SearchResultMainSubtitle>
                 </SearchResultMainTitle>
               </SearchResult>
             )}
         {isProductsActive &&
         searchResponseProducts &&
-        searchResponseProducts.data.length > 1
+        searchResponseProducts.data.length > 0
           ? searchResponseProducts.data.map((product) => (
               <SearchResult>
                 <SearchResultMainTitle>
@@ -185,7 +164,7 @@ const SearchPage = () => {
               <SearchResult>
                 <SearchResultMainTitle>
                   <SearchResultMainSubtitle>
-                    No results
+                    {enterPressed && 'No results'}
                   </SearchResultMainSubtitle>
                 </SearchResultMainTitle>
               </SearchResult>

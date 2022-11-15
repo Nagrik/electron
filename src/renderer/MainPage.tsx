@@ -1,46 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import CheckboxDefault from './icons/CheckboxDefault';
-import CheckboxChecked from './icons/CheckboxChecked';
 import InfoIcon from './icons/InfoIcon';
-import useHover from './hooks/useHover';
 import useOnClickOutside from './hooks/useOnClickOutside';
 
 const MainPage = () => {
-  // const databases = [
-  //   {
-  //     name: 'Your domain with our DB',
-  //     // options: your DB or your DBs + link to your domain
-  //     id: 1,
-  //     checked: false,
-  //   },
-  //   // {
-  //   //   name: 'Own api',
-  //   //   // options:  your DB or your DBs
-  //   //   id: 2,
-  //   //   checked: false,
-  //   // },
-  //   {
-  //     name: 'Your database with our api',
-  //     // options:  input with link
-  //     id: 3,
-  //     checked: false,
-  //   },
-  //   {
-  //     name: 'Your database with your own api',
-  //     id: 4,
-  //     checked: false,
-  //   },
-  //   {
-  //     name: 'Our database with our api',
-  //     id: 5,
-  //     checked: false,
-  //   },
-  // ];
-
-  // const [databasesList, setDatabasesList] = useState(databases);
   const [saveDB, setSaveDB] = useState(false);
-  const [saveDomain, setSaveDomain] = useState(false);
+  const [domainSaved, setDomainSaved] = useState(false);
   const [isDomainActive, setIsDomainActive] = useState<boolean>(false);
   const [isDBActive, setIsDBActive] = useState<boolean>(false);
   const [inputDomainValue, setInputDomainValue] = useState<string>('');
@@ -54,32 +19,29 @@ const MainPage = () => {
   });
 
   const changeInputDomainValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputDomainValue(e.target.value);
-    if (e.target.value === '') {
-      setSaveDomain(false);
+    if (!domainSaved) {
+      setInputDomainValue(e.target.value);
     }
   };
 
   const changeInputDBValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputDBValue(e.target.value);
-    if (e.target.value === '') {
-      setSaveDB(false);
-    }
   };
 
-  // const chooseDB = (id: number) => {
-  //   const newDatabases = databases.map((db) => {
-  //     if (db.id === id) {
-  //       return {
-  //         ...db,
-  //         checked: !db.checked,
-  //       };
-  //     }
-  //     return db;
-  //   });
-  //   setDatabasesList(newDatabases);
-  //   setCurrentDB(id);
-  // };
+  const saveDomain = () => {
+    setDomainSaved(true);
+  };
+
+  const [firstInputActive, setFirstInputActive] = useState<boolean>(false);
+  const [secondInputActive, setSecondInputActive] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>('');
+
+  const firstInputRef = useOnClickOutside(() => {
+    setFirstInputActive(false);
+  });
+  const secondInputRef = useOnClickOutside(() => {
+    setSecondInputActive(false);
+  });
   return (
     <>
       <Wrapper>
@@ -142,76 +104,78 @@ const MainPage = () => {
                 )}
               </IconWrapper>
               <div className="container">
-                <input
-                  type="text"
-                  id="domain"
-                  autoComplete="off"
-                  placeholder=" "
-                  className="form__input"
-                  onChange={(e) => changeInputDomainValue(e)}
-                />
-                <label htmlFor="domain">Link to your domain</label>
+                <InputWrapperr
+                  ref={firstInputRef}
+                  active={firstInputActive}
+                  onClick={() => setFirstInputActive(true)}
+                >
+                  <Input
+                    placeholder="Link to your Domain"
+                    onChange={(e) => changeInputDomainValue(e)}
+                    value={inputDomainValue}
+                  />
+                </InputWrapperr>
               </div>
-              <SaveButtonDomain
-                disabled={inputDomainValue === ''}
-                active={saveDomain && inputDomainValue !== ''}
-                onClick={() => setSaveDomain(!saveDomain)}
-              >
-                {saveDomain && inputDomainValue !== '' ? 'Saved' : 'Save'}
-              </SaveButtonDomain>
+              {domainSaved ? (
+                <SaveButtonDomain
+                  disabled={inputDomainValue === ''}
+                  active={inputDomainValue !== ''}
+                  change={domainSaved}
+                  onClick={() => {
+                    setDomainSaved(false);
+                    window.localStorage.removeItem('domain');
+                  }}
+                >
+                  <span>Change</span>
+                </SaveButtonDomain>
+              ) : (
+                <SaveButtonDomain
+                  disabled={inputDomainValue === ''}
+                  active={inputDomainValue !== ''}
+                  onClick={() => {
+                    inputDomainValue !== '' && setDomainSaved(true);
+                    window.localStorage.setItem('domain', inputDomainValue);
+                  }}
+                >
+                  <span>Save</span>
+                </SaveButtonDomain>
+              )}
             </InputWrapper>
             <InputWrapper>
-              <IconWrapper
-                ref={refDB}
-                onClick={() => setIsDBActive(!isDBActive)}
-              >
-                <InfoIcon />
-                {isDBActive && (
-                  <InfoBlockWrapper>
-                    By saving this field you will make requests from your DB by
-                    link.
-                    <br /> You can read detailed documentation{' '}
-                    <a href="">here</a>
-                  </InfoBlockWrapper>
-                )}
-              </IconWrapper>
-              <div className="container">
-                <input
-                  type="text"
-                  id="db"
-                  autoComplete="off"
-                  placeholder=" "
-                  className="form__input"
-                  onChange={(e) => changeInputDBValue(e)}
-                />
-                <label htmlFor="db">Link to your database</label>
-              </div>
-              <SaveButtonDB
-                disabled={inputDBValue === ''}
-                active={saveDB && inputDBValue !== ''}
-                onClick={() => setSaveDB(!saveDB)}
-              >
-                {saveDB && inputDBValue !== '' ? 'Saved' : 'Save'}
-              </SaveButtonDB>
+              {/* <IconWrapper */}
+              {/*   ref={refDB} */}
+              {/*   onClick={() => setIsDBActive(!isDBActive)} */}
+              {/* > */}
+              {/*   <InfoIcon /> */}
+              {/*   {isDBActive && ( */}
+              {/*     <InfoBlockWrapper> */}
+              {/*       By saving this field you will make requests from your DB by */}
+              {/*       link. */}
+              {/*       <br /> You can read detailed documentation{' '} */}
+              {/*       <a href="">here</a> */}
+              {/*     </InfoBlockWrapper> */}
+              {/*   )} */}
+              {/* </IconWrapper> */}
+              {/* <div className="container"> */}
+              {/*   <InputWrapperr */}
+              {/*     ref={secondInputRef} */}
+              {/*     active={secondInputActive} */}
+              {/*     onClick={() => setSecondInputActive(true)} */}
+              {/*   > */}
+              {/*     <Input */}
+              {/*       placeholder="Link to your DB" */}
+              {/*       onChange={(e) => changeInputDBValue(e)} */}
+              {/*     /> */}
+              {/*   </InputWrapperr> */}
+              {/* </div> */}
+              {/* <SaveButtonDB */}
+              {/*   disabled={inputDBValue === ''} */}
+              {/*   active={saveDB && inputDBValue !== ''} */}
+              {/*   onClick={() => setSaveDB(!saveDB)} */}
+              {/* > */}
+              {/*   {saveDB && inputDBValue !== '' ? 'Saved' : 'Save'} */}
+              {/* </SaveButtonDB> */}
             </InputWrapper>
-
-            {/* <Instruction> */}
-            {/*   <InstructionTitle> */}
-            {/*     How to get link to your database: */}
-            {/*   </InstructionTitle> */}
-            {/*   <ParagraphWrapper> */}
-            {/*     <InstructionParagraph> */}
-            {/*       1. Create a new database in D1. */}
-            {/*     </InstructionParagraph> */}
-            {/*     <InstructionParagraph> */}
-            {/*       2. Create a new worker in Cloudflare Workers. */}
-            {/*     </InstructionParagraph> */}
-            {/*     <InstructionParagraph> */}
-            {/*       3. Copy the worker code from <a href="">here</a> and paste it */}
-            {/*       into your worker. */}
-            {/*     </InstructionParagraph> */}
-            {/*   </ParagraphWrapper> */}
-            {/* </Instruction> */}
           </InstructionWrapper>
         </ChooseDBContentWrapper>
       </ChooseDBWrapper>
@@ -220,6 +184,39 @@ const MainPage = () => {
 };
 
 export default MainPage;
+
+const Icon = styled.div`
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const InputWrapperr = styled.div<{ active: boolean }>`
+  display: flex;
+  color: black;
+  border: ${({ active }) =>
+    active ? '2px solid cadetblue' : '2px solid rgba(156, 163, 175, 1)'};
+  width: 400px;
+  padding: 5px 0;
+  border-radius: 0.25rem;
+  margin-bottom: 12px;
+`;
+
+const Input = styled.input`
+  border: none;
+  padding: 5px 5px;
+  font-size: 16px;
+  width: 100%;
+  &::placeholder {
+    color: rgba(156, 163, 175, 1);
+    font-size: 16px;
+  }
+  &:focus {
+    outline: none;
+    border: none;
+  }
+`;
 
 const InfoBlockWrapper = styled.div`
   background-color: #fff;
@@ -249,10 +246,12 @@ const SaveButtonDB = styled.button<{ active: boolean }>`
   background-color: ${({ active }) => (active ? '#37b737' : '#fff')};
   color: ${({ active }) => (active ? '#fff' : '#000')};
 `;
-const SaveButtonDomain = styled.button<{ active: boolean }>`
+const SaveButtonDomain = styled.button<{ active: boolean; change?: boolean }>`
   margin-top: 4px;
   margin-left: 15px;
-  background-color: ${({ active }) => (active ? '#37b737' : '#fff')};
+  background-color: ${({ active, change }) =>
+    // eslint-disable-next-line no-nested-ternary
+    active && !change ? '#37b737' : change ? '#bf3945' : '#fff'};
   color: ${({ active }) => (active ? '#fff' : '#000')};
 `;
 
@@ -289,26 +288,6 @@ const InputWrapper = styled.div`
   display: flex;
   //width: 300px;
   align-content: center;
-`;
-
-const Input = styled.input`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background: #121212;
-  border: 2px solid #fff;
-  border-radius: 0.5em;
-  outline: none;
-  color: #fff;
-  padding-left: 1em;
-  :hover {
-    border: 2px solid rgba(255, 255, 255, 0.5);
-  }
-  :focus {
-    border: 2px solid #00ffff;
-  }
-  :focus ~ label {
-  }
 `;
 
 const Label = styled.label`

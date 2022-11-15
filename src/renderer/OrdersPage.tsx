@@ -8,48 +8,42 @@ import HeaderArrowIcon from './icons/HeaderArrowIcon';
 import { setQuery } from '../store/actions/login';
 import { selectQuery } from '../store/selectors/auth';
 import Pagination from './Pagination';
-
-type Order = {
-  CustomerID: string;
-  Freight: string;
-  OrderDate: string;
-  OrderID: number;
-  RequiredDate: string;
-  ShipAddress: string;
-  ShipCity: string;
-  ShipName: string;
-  ShipVia: number;
-  ShippedDate: string;
-  TotalPrice: number;
-  TotalProducts: string;
-  TotalQuantity: string;
-  ShipCountry: string;
-};
+import { Order, OrderPageQuery } from '../types/order';
 
 const OrdersPage = () => {
-  const [orders, setOrders] = useState<any>(null);
+  const [orders, setOrders] = useState<OrderPageQuery | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const obj = {
-    query: orders?.queries,
-    time: new Date().toISOString(),
-  };
+
   const dispatch = useDispatch<any>();
   useEffect(() => {
-    axios
-      .get(
-        `https://therealyo-northwind.herokuapp.com/orders?page=${currentPage}`
-      )
-      .then((res) => {
+    const domain = window.localStorage.getItem('domain');
+    if (window.localStorage.getItem('domain')) {
+      axios.get(`${domain}/orders?page=${currentPage}`).then((res) => {
         // console.log(res);
         setOrders(res.data);
         return res.data;
       });
+    } else {
+      window.api.orders.getOrderPage(currentPage!).then((data) => {
+        console.log('pageData: ', data);
+        setOrders(data);
+        // setSupplierData(data.data[0]);
+      });
+    }
+
+    return () => {
+      window.api.removeAllListeners('getOrderPage');
+    };
   }, [currentPage]);
   useEffect(() => {
-    if (orders?.queries?.length > 0) {
+    if (orders && orders.queries?.length > 0) {
+      const obj = {
+        query: orders?.queries,
+        time: new Date().toISOString(),
+      };
       dispatch(setQuery(obj));
     }
-  }, [orders]);
+  }, [orders, dispatch]);
 
   return (
     <Wrapper>
@@ -71,7 +65,7 @@ const OrdersPage = () => {
               <Country>Country</Country>
             </TableHeader>
             <TableBody>
-              {orders?.page.map((order: Order) => (
+              {orders.data.map((order: Order) => (
                 <TableRow>
                   <BodyCompany>
                     <Link to={`/order/${order.OrderID}`}>{order.OrderID}</Link>
@@ -94,13 +88,13 @@ const OrdersPage = () => {
                   <Pagination
                     className="pagination-bar"
                     currentPage={currentPage}
-                    totalCount={orders.count}
+                    totalCount={orders.data[0].count}
                     pageSize={20}
                     onPageChange={(page: any) => setCurrentPage(page)}
                   />
                 </PaginationRow>
                 <PageCount>
-                  Page: {currentPage} of {Math.ceil(orders?.count / 20)}
+                  Page: {currentPage} of {Math.ceil(orders.data[0].count! / 20)}
                 </PageCount>
               </PaginationWrapper>
             </TableBody>

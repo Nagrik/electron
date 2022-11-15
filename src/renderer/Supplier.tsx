@@ -1,25 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
+// import { remote } from 'electron';
 import axios from 'axios';
+// import shared from '../main/main';
 import Ballot from './icons/Ballot';
+// import { server } from '../main/main';
+// import { instance } from '../main/main';
+
+// export type SupplierType = {
+//   queries: string[];
+//   data: {
+//     SupplierID: number;
+//     CompanyName: string;
+//     ContactName: string;
+//     ContactTitle: string;
+//     Address: string;
+//     City: string;
+//     Region: string;
+//     PostalCode: string;
+//     Country: string;
+//     Phone: string;
+//     Fax: string;
+//     HomePage: string;
+//   };
+// };
 
 type SupplierType = {
-  queries: string[];
-  data: {
-    SupplierID: number;
-    CompanyName: string;
-    ContactName: string;
-    ContactTitle: string;
-    Address: string;
-    City: string;
-    Region: string;
-    PostalCode: string;
-    Country: string;
-    Phone: string;
-    Fax: string;
-    HomePage: string;
-  };
+  SupplierID: number;
+  CompanyName: string;
+  ContactName: string;
+  ContactTitle: string;
+  Address: string;
+  City: string;
+  Region: string;
+  PostalCode: string;
+  Country: string;
+  Phone: string;
+  Fax: string;
+  HomePage: string;
 };
 
 const Supplier = () => {
@@ -29,13 +48,25 @@ const Supplier = () => {
     navigation('/suppliers');
   };
   const [supplierData, setSupplierData] = useState<SupplierType | null>(null);
+  const domain = window.localStorage.getItem('domain');
   useEffect(() => {
-    axios
-      .get(`https://therealyo-northwind.herokuapp.com/supplier?id=${id}`)
-      .then((res: any) => {
-        setSupplierData(res.data);
+    if (domain) {
+      axios.get(`${domain}/supplier?id=${id}`).then((res) => {
+        // console.log(res.data);
+        setSupplierData(res.data.data);
       });
-  }, []);
+    } else {
+      window.api.suppliers.getSupplier(id!).then((data) => {
+        console.log('Data: ', data);
+        setSupplierData(data.data[0]);
+      });
+    }
+
+    return () => {
+      window.api.removeAllListeners('getSupplier');
+    };
+  }, [domain, id]);
+
   return (
     <Wrapper>
       {supplierData ? (
@@ -52,7 +83,7 @@ const Supplier = () => {
                     Company Name
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.CompanyName}
+                    {supplierData.CompanyName}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -60,7 +91,7 @@ const Supplier = () => {
                     Contact Name
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.ContactName}
+                    {supplierData.ContactName}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -68,19 +99,19 @@ const Supplier = () => {
                     Contact Title
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.ContactTitle}
+                    {supplierData.ContactTitle}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Address</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.Address}
+                    {supplierData.Address}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>City</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.City}
+                    {supplierData.City}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentLeft>
@@ -88,7 +119,7 @@ const Supplier = () => {
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Region</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.Region}
+                    {supplierData.Region}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -96,19 +127,19 @@ const Supplier = () => {
                     Postal Code
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.PostalCode}
+                    {supplierData.PostalCode}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Country</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.Country}
+                    {supplierData.Country}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Phone</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {supplierData.data.Phone}
+                    {supplierData.Phone}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentRight>

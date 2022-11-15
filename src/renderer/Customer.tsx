@@ -26,13 +26,23 @@ const Customer = () => {
   };
 
   const [customerData, setCustomerData] = useState<CustomerType | null>(null);
+  const domain = window.localStorage.getItem('domain');
   useEffect(() => {
-    axios
-      .get(`https://therealyo-northwind.herokuapp.com/customer?id=${id}`)
-      .then((res: any) => {
+    if (domain) {
+      axios.get(`${domain}/customer?id=${id}`).then((res: any) => {
         setCustomerData(res.data.data);
       });
-  }, []);
+    } else {
+      window.api.customers.getCustomer(id!).then((data) => {
+        console.log('Data: ', data);
+        setCustomerData(data.data[0]);
+      });
+    }
+
+    return () => {
+      window.api.removeAllListeners('getCustomer');
+    };
+  }, [domain, id]);
   return (
     <Wrapper>
       {customerData ? (
@@ -49,7 +59,7 @@ const Customer = () => {
                     Company Name
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {customerData?.CompanyName}
+                    {customerData.CompanyName}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -57,7 +67,7 @@ const Customer = () => {
                     Contact Name
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {customerData?.ContactName}
+                    {customerData.ContactName}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -65,19 +75,19 @@ const Customer = () => {
                     Contact Title
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {customerData?.ContactTitle}
+                    {customerData.ContactTitle}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Address</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {customerData?.Address}
+                    {customerData.Address}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>City</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {customerData?.City}
+                    {customerData.City}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentLeft>
@@ -85,7 +95,7 @@ const Customer = () => {
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Region</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {customerData?.Region}
+                    {customerData.Region}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
@@ -93,19 +103,19 @@ const Customer = () => {
                     Postal Code
                   </BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {customerData?.PostalCode}
+                    {customerData.PostalCode}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Country</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {customerData?.Country}
+                    {customerData.Country}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
                 <BodyContentLeftItem>
                   <BodyContentLeftItemTitle>Phone</BodyContentLeftItemTitle>
                   <BodyContentLeftItemValue>
-                    {customerData?.Phone}
+                    {customerData.Phone}
                   </BodyContentLeftItemValue>
                 </BodyContentLeftItem>
               </BodyContentRight>
