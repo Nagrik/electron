@@ -29,14 +29,6 @@ Start the app in the \`dev\` environment:
 npm start
 \`\`\`
 
-<!-- ## Packaging for Production
-
-To package apps for the local platform:
-
-\`\`\`bash
-npm run package
-\`\`\` -->
-
 ### Docs
 
 You can use existing backend for this application with existing database or provide your own database either adding link to it in **.env** or setting link in dashboard page of the application.
