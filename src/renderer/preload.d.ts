@@ -9,6 +9,8 @@ declare global {
     api: {
       removeAllListeners(channel: string): void;
 
+      setDB(dbURL: string): void;
+
       suppliers: {
         getSupplier(id: string): Promise<SupplierQuery>;
         getSupplierPage(page: number): Promise<SupplierPageQuery>;

@@ -7,18 +7,9 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.removeAllListeners(channel);
   },
 
-  // setUrl(url: string) {
-  //   ipcRenderer.send('setUrl', url);
-  // },
-
-  // getUrl() {
-  //   ipcRenderer.send('getUrl');
-  //   return new Promise((resolve) => {
-  //     ipcRenderer.once('getUrl', (event, url: string) => {
-  //       resolve(url);
-  //     });
-  //   });
-  // },
+  setDB(dbURL: string) {
+    ipcRenderer.send('setDB', dbURL);
+  },
 
   suppliers: {
     getSupplier(id: string) {
