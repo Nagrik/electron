@@ -539,7 +539,6 @@ MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplat
           },
         }}
       />
-      ,
     </Wrapper>
   );
 };
